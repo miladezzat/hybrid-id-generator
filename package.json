@@ -1,6 +1,6 @@
 {
   "name": "hybrid-id-generator",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "dist/hybrid-id-generator.js",
   "scripts": {
     "build": "tsc",
