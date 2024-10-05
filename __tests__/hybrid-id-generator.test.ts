@@ -6,7 +6,7 @@ describe('HybridIDGenerator', () => {
     test('should generate IDs with correct format', () => {
         const idGenerator = new HybridIDGenerator(512);
         const newId = idGenerator.nextId();
-        expect(typeof newId).toBe('number'); // Ensure ID is a number
+        expect(typeof newId).toBe('bigint'); // Ensure ID is a number
     });
 
     test('should correctly encode and decode Base62 IDs', () => {
