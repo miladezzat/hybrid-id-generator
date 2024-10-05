@@ -4,8 +4,6 @@
 
 A TypeScript-based Hybrid ID Generator that produces unique IDs combining timestamps, machine identifiers, sequences, and random bits. This package is designed for both client-side and server-side use.
 
-this works on both server side and client side
-
 Read more about this package on [This](./purpose.md)
 
 ## Features

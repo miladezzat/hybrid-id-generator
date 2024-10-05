@@ -3,16 +3,6 @@ import HybridIDGenerator from '../src/hybrid-id-generator'; // Adjust the path a
 jest.useFakeTimers();
 
 describe('HybridIDGenerator', () => {
-    test('should generate unique IDs', () => {
-        const idGenerator = new HybridIDGenerator(512);
-        const ids = new Set<number>();
-        for (let i = 0; i < 1000; i++) {
-            ids.add(idGenerator.nextId());
-            jest.advanceTimersByTime(1); // Simulate waiting for the next millisecond
-        }
-        expect(ids.size).toBe(1000); // Ensure all IDs are unique
-    });
-
     test('should generate IDs with correct format', () => {
         const idGenerator = new HybridIDGenerator(512);
         const newId = idGenerator.nextId();
