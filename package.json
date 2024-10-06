@@ -1,11 +1,11 @@
 {
   "name": "hybrid-id-generator",
   "version": "2.0.1",
-  "main": "dist/hybrid-id-generator.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "start": "node dist/hybrid-id-generator.js"
+    "start": "node dist/index.js"
   },
   "author": "Milad Ezzat",
   "description": "A robust and efficient hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create unique identifiers. Supports collision prevention, ID expiry tracking, and Base62 encoding.",
