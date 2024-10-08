@@ -1,6 +1,9 @@
 import { EventEmitter } from 'events';
 import { generateRandomBits, obfuscateTimestamp, encodeBase62, decodeBase62 } from './utils';
 
+
+export type HybridID = bigint & { __brand__: 'HybridID' };
+
 export interface HybridIDGeneratorOptions {
     sequenceBits?: number;
     randomBits?: number;
@@ -44,7 +47,7 @@ export class HybridIDGenerator extends EventEmitter {
         this.maxSequence = (1 << this.sequenceBits) - 1;
     }
 
-    nextId(): bigint {
+    nextId(): HybridID {
         let timestamp = this.getTimestamp();
         if (this.maskTimestamp) {
             timestamp = obfuscateTimestamp(timestamp);
@@ -64,15 +67,15 @@ export class HybridIDGenerator extends EventEmitter {
         this.lastTimestamp = timestamp;
         const randomBits = generateRandomBits(this.randomBits, this.useCrypto);
         const hybridId = (timestamp << BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
-                         (BigInt(this.machineId) << BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
-                         (BigInt(randomBits) << BigInt(this.sequenceBits)) |
-                         BigInt(this.sequence);
+            (BigInt(this.machineId) << BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+            (BigInt(randomBits) << BigInt(this.sequenceBits)) |
+            BigInt(this.sequence);
 
         if (this.enableEventEmission) {
             this.emit('idGenerated', hybridId);
         }
 
-        return hybridId;
+        return hybridId as HybridID;
     }
 
     getTimestamp(): bigint {
@@ -91,6 +94,15 @@ export class HybridIDGenerator extends EventEmitter {
 
     fromBase62(encodedId: string): bigint {
         return decodeBase62(encodedId);
+    }
+
+    isValidateId(id: bigint | string): id is HybridID {
+        // check if the id is hybrid id correctly
+        // add logic to check if the id is valid
+        const decodedId = this.fromBase62(id.toString()); // Decode from Base62
+        // Check if the decoded ID is a valid hybrid ID (non-negative)
+        return decodedId >= BigInt(0);
+
     }
 }
 

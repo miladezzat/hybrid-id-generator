@@ -66,4 +66,26 @@ describe('HybridIDGenerator', () => {
         const isExpired = idGenerator.isIdExpired(newId, 4000);
         expect(isExpired).toBe(true); // Ensure ID is marked as expired
     });
+
+    test('should validate IDs correctly', () => {
+        const newId = idGenerator.nextId();
+        const isValid = idGenerator.isValidateId(newId);
+
+        expect(isValid).toBe(true); // Ensure ID is marked as valid
+    })
+
+    test('should validate Base62 IDs correctly', () => {
+        const newId = idGenerator.nextId();
+        const base62Id = idGenerator.toBase62(newId);
+        const isValid = idGenerator.isValidateId(base62Id);
+
+        expect(isValid).toBe(true); // Ensure Base62 ID is marked as valid
+    });
+
+    test('should validate invalid IDs correctly', () => {
+        const invalidId = BigInt(-1);
+        const isValid = idGenerator.isValidateId(invalidId);
+
+        expect(isValid).toBe(false); // Ensure invalid ID is marked as invalid
+    });
 });
