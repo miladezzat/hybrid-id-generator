@@ -87,6 +87,8 @@ console.log(`Is ID expired? ${isExpired}`);
    - Decodes a Base62 encoded string back to the original ID.
 5. `isIdExpired(id: number, expiryDurationInMillis: number): boolean`
    - Checks if the given ID has expired based on the provided duration in milliseconds.
+6. `info(id: HybridID | bigint | string): HybridIDInfo`
+   - Get the HybridID information
 
 ## Events
 `idGenerated`
