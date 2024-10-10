@@ -14,6 +14,14 @@ export interface HybridIDGeneratorOptions {
     machineIdBits?: number;
 }
 
+export interface HybridIDInfo { 
+    timestamp: bigint; 
+    machineId: number; 
+    randomBits: number; 
+    sequence: number; 
+    masked: boolean; 
+}
+
 export class HybridIDGenerator extends EventEmitter {
     private machineId: number;
     private sequence: number = 0;
@@ -96,14 +104,76 @@ export class HybridIDGenerator extends EventEmitter {
         return decodeBase62(encodedId);
     }
 
-    isValidateId(id: bigint | string): id is HybridID {
-        // check if the id is hybrid id correctly
-        // add logic to check if the id is valid
-        const decodedId = this.fromBase62(id.toString()); // Decode from Base62
-        // Check if the decoded ID is a valid hybrid ID (non-negative)
-        return decodedId >= BigInt(0);
-
+    isValidateId(id: bigint | string): boolean {
+        if (typeof id === 'string') {
+            // Check if the string contains only valid Base62 characters
+            if (!/^[0-9a-zA-Z]+$/.test(id)) {
+                return false;  // Invalid characters for Base62
+            }
+            try {
+                id = this.fromBase62(id);
+            } catch (e) {
+                return false;  // Return false if decoding throws an error
+            }
+        }
+    
+        const totalBits = this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
+    
+        const timestamp = id >> BigInt(totalBits);
+        if (timestamp < 0) return false;  // Timestamp must be non-negative
+    
+        const machineIdShift = this.sequenceBits + this.randomBits + this.entropyBits;
+        const machineId = Number((id >> BigInt(machineIdShift)) & BigInt((1 << this.machineIdBits) - 1));
+        if (machineId < 0 || machineId > this.maxMachineId) return false;  // Check valid machine ID range
+    
+        const randomBits = Number((id >> BigInt(this.sequenceBits)) & BigInt((1 << this.randomBits) - 1));
+        if (randomBits < 0 || randomBits >= (1 << this.randomBits)) return false;  // Valid range for random bits
+    
+        const sequence = Number(id & BigInt(this.maxSequence));
+        if (sequence < 0 || sequence > this.maxSequence) return false;  // Valid sequence range
+    
+        return true;
     }
+    
+
+    info(id: HybridID | bigint | string): HybridIDInfo {
+
+        // check if the id is vaiid
+        if (!this.isValidateId(id)) {
+            throw new Error('Invalid ID');
+        }
+
+        if (typeof id === 'string') {
+            id = this.fromBase62(id);  // Convert to bigint if the ID is in Base62 format.
+        }
+
+        const totalBits = this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
+
+        // Extract timestamp (shift right to remove the other components)
+        let timestamp = id >> BigInt(totalBits);
+
+        // If timestamp is masked, we can't reverse obfuscation, but we can flag it
+        let masked = this.maskTimestamp;
+
+        // Extract the machine ID
+        const machineIdShift = this.sequenceBits + this.randomBits + this.entropyBits;
+        const machineId = Number((id >> BigInt(machineIdShift)) & BigInt((1 << this.machineIdBits) - 1));
+
+        // Extract random bits
+        const randomBits = Number((id >> BigInt(this.sequenceBits)) & BigInt((1 << this.randomBits) - 1));
+
+        // Extract sequence
+        const sequence = Number(id & BigInt(this.maxSequence));
+
+        return {
+            timestamp: masked ? BigInt(-1) : timestamp,  // Return -1 if the timestamp is masked
+            machineId,
+            randomBits,
+            sequence,
+            masked,
+        };
+    }
+
 }
 
 export default HybridIDGenerator;
