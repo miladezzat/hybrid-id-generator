@@ -1,6 +1,7 @@
 # Hybrid ID Generator
 
 ![npm](https://img.shields.io/npm/v/hybrid-id-generator) ![npm](https://img.shields.io/npm/l/hybrid-id-generator)
+![npm](https://img.shields.io/npm/dw/hybrid-id-generator)![GitHub stars](https://img.shields.io/github/stars/miladezzat/hybrid-id-generator)
 
 The **Hybrid ID Generator** is a powerful TypeScript-based library designed to produce unique identifiers by seamlessly combining timestamps, machine identifiers, sequence numbers, and random bits. This innovative approach ensures that each generated ID is unique and highly resilient against collisions, making it ideal for distributed systems.
 
