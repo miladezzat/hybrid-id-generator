@@ -1,7 +1,7 @@
 {
     "name": "hybrid-id-generator",
     "version": "3.0.2",
-    "description": "A robust and efficient hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create unique identifiers. Supports collision prevention, ID expiry tracking, and Base62 encoding.",
+    "description": "A powerful hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create globally unique identifiers. Features collision prevention, Base62 encoding, and optional ID expiry tracking, ideal for distributed systems and high-scale applications.",
     "author": "Milad Ezzat",
     "main": "dist/index.js",
     "scripts": {
@@ -15,9 +15,21 @@
     "keywords": [
         "id",
         "identifier",
-        "unique",
-        "hybrid",
-        "generator"
+        "unique id",
+        "uuid",
+        "hybrid id",
+        "generator",
+        "timestamp",
+        "random id",
+        "sequence id",
+        "collision-free",
+        "id expiry",
+        "base62",
+        "node id",
+        "machine id",
+        "unique identifier",
+        "distributed systems",
+        "uuid alternative"
     ],
     "devDependencies": {
         "@types/jest": "^29.5.13",
@@ -33,5 +45,5 @@
     "bugs": {
         "url": "https://github.com/miladezzat/hybrid-id-generator/issues"
     },
-    "homepage": "https://github.com/miladezzat/hybrid-id-generator"
+    "homepage": "http://nodejs.miladfahmy.me/hybrid-id-generator"
 }
