@@ -138,6 +138,7 @@ Initializes a new instance of `HybridIDGenerator` with the specified options.
 idGenerator.on('idGenerated', (id) => {
     console.log(`New ID generated: ${id}`);
 });
+idGenerator.nextId();
 ```
 
 ## Contributing
