@@ -1,6 +1,6 @@
 {
     "name": "hybrid-id-generator",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "description": "A robust and efficient hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create unique identifiers. Supports collision prevention, ID expiry tracking, and Base62 encoding.",
     "author": "Milad Ezzat",
     "main": "dist/index.js",
