@@ -1,0 +1,1151 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>hybrid-id-generator documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">hybrid-id-generator documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  HybridIDGeneratorOptions</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/HybridIDGenerator.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#enableEventEmission" 
+>
+                                            enableEventEmission
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#entropyBits" 
+>
+                                            entropyBits
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#machineId" 
+>
+                                            machineId
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#machineIdBits" 
+>
+                                            machineIdBits
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#machineIdStrategy" 
+>
+                                            machineIdStrategy
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#maskTimestamp" 
+>
+                                            maskTimestamp
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#randomBits" 
+>
+                                            randomBits
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#sequenceBits" 
+>
+                                            sequenceBits
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#useCrypto" 
+>
+                                            useCrypto
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="enableEventEmission"></a>
+                                        <span class="name "><b>enableEventEmission</b>
+                                            <a href="#enableEventEmission">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>enableEventEmission:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="entropyBits"></a>
+                                        <span class="name "><b>entropyBits</b>
+                                            <a href="#entropyBits">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>entropyBits:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="machineId"></a>
+                                        <span class="name "><b>machineId</b>
+                                            <a href="#machineId">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>machineId:     <code>number | string</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>    <code>number | string</code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="machineIdBits"></a>
+                                        <span class="name "><b>machineIdBits</b>
+                                            <a href="#machineIdBits">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>machineIdBits:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="machineIdStrategy"></a>
+                                        <span class="name "><b>machineIdStrategy</b>
+                                            <a href="#machineIdStrategy">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>machineIdStrategy:     <code>&quot;env&quot; | &quot;network&quot; | &quot;random&quot;</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>    <code>&quot;env&quot; | &quot;network&quot; | &quot;random&quot;</code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="maskTimestamp"></a>
+                                        <span class="name "><b>maskTimestamp</b>
+                                            <a href="#maskTimestamp">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>maskTimestamp:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="randomBits"></a>
+                                        <span class="name "><b>randomBits</b>
+                                            <a href="#randomBits">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>randomBits:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="sequenceBits"></a>
+                                        <span class="name "><b>sequenceBits</b>
+                                            <a href="#sequenceBits">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>sequenceBits:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="useCrypto"></a>
+                                        <span class="name "><b>useCrypto</b>
+                                            <a href="#useCrypto">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>useCrypto:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { EventEmitter } from &#x27;events&#x27;;
+import { generateRandomBits, obfuscateTimestamp, encodeBase62, decodeBase62, validateMachineId } from &#x27;./utils&#x27;;
+import { MachineIDStrategy } from &quot;./MachineIDProvider&quot;;
+import { HybridID } from &#x27;./HybridID&#x27;;
+
+
+export interface HybridIDGeneratorOptions {
+    sequenceBits?: number;
+    randomBits?: number;
+    entropyBits?: number;
+    useCrypto?: boolean;
+    maskTimestamp?: boolean;
+    enableEventEmission?: boolean;
+    machineIdBits?: number;
+    machineId?: number | string;
+    machineIdStrategy?: &#x27;env&#x27; | &#x27;network&#x27; | &#x27;random&#x27;; // this is the machine id provider strategy
+}
+
+export interface HybridIDInfo {
+    timestamp: bigint;
+    machineId: number;
+    randomBits: number;
+    sequence: number;
+    masked: boolean;
+}
+
+export class HybridIDGenerator extends EventEmitter {
+    /**
+     * The machine ID used for generating unique Hybrid IDs.
+     * @private
+     * @type {number}
+     */
+    private machineId: number;
+
+    /**
+     * The current sequence number for ID generation.
+     * This resets to 0 when the timestamp changes.
+     * @private
+     * @type {number}
+     * @default 0
+     */
+    private sequence: number &#x3D; 0;
+
+    /**
+     * The last generated timestamp in BigInt format.
+     * This is used to determine if a new timestamp is needed
+     * during ID generation.
+     * @private
+     * @type {bigint}
+     * @default -1n
+     */
+    private lastTimestamp: bigint &#x3D; BigInt(-1);
+
+    /**
+     * The number of bits allocated for the sequence component of the Hybrid ID.
+     * @private
+     * @type {number}
+     */
+    private sequenceBits: number;
+
+    /**
+     * The number of bits allocated for random bits in the Hybrid ID.
+     * @private
+     * @type {number}
+     */
+    private randomBits: number;
+
+    /**
+     * The number of bits allocated for entropy in the Hybrid ID.
+     * @private
+     * @type {number}
+     */
+    private entropyBits: number;
+
+    /**
+     * Flag indicating whether to use cryptographic functions for random number generation.
+     * @private
+     * @type {boolean}
+     */
+    private useCrypto: boolean;
+
+    /**
+     * Flag indicating whether the timestamp should be masked during ID generation.
+     * @private
+     * @type {boolean}
+     */
+    private maskTimestamp: boolean;
+
+    /**
+     * Flag indicating whether event emission is enabled for ID generation events.
+     * @private
+     * @type {boolean}
+     */
+    private enableEventEmission: boolean;
+
+    /**
+     * The maximum value for the sequence component based on the number of bits allocated.
+     * @private
+     * @type {number}
+     */
+    private maxSequence: number;
+
+    /**
+     * The maximum value for the machine ID based on the number of bits allocated.
+     * @private
+     * @type {number}
+     */
+    private maxMachineId: number;
+
+    /**
+     * The number of bits allocated for the machine ID component of the Hybrid ID.
+     * @private
+     * @type {number}
+     */
+    private machineIdBits: number;
+
+    /**
+     * The strategy used for generating the machine ID.
+     * @private
+     * @type {MachineIDStrategy}
+     */
+    private machineIdStrategy: MachineIDStrategy;
+
+
+    /**
+     * Constructs a new Hybrid ID generator with the specified options.
+     *
+     * The constructor initializes various properties related to ID generation,
+     * including bit allocation for the sequence, random bits, and entropy,
+     * as well as the machine ID and options for masking and event emission.
+     *
+     * @param {HybridIDGeneratorOptions} [options&#x3D;{}] - The configuration options for the ID generator.
+     * @param {number} [options.sequenceBits&#x3D;12] - The number of bits for the sequence component (default: 12).
+     * @param {number} [options.randomBits&#x3D;10] - The number of bits for the random component (default: 10).
+     * @param {number} [options.entropyBits&#x3D;5] - The number of bits for the entropy component (default: 5).
+     * @param {boolean} [options.useCrypto&#x3D;false] - Whether to use cryptographic functions for random generation (default: false).
+     * @param {boolean} [options.maskTimestamp&#x3D;false] - Whether to mask the timestamp (default: false).
+     * @param {boolean} [options.enableEventEmission&#x3D;false] - Whether to enable event emission for ID generation (default: false).
+     * @param {number} [options.machineIdBits&#x3D;12] - The number of bits for the machine ID component (default: 12).
+     * @param {MachineIDStrategy} [options.machineIdStrategy] - The strategy used for generating the machine ID.
+     * @param {number} [options.machineId] - The initial machine ID to use (must be validated).
+     */
+    constructor(options: HybridIDGeneratorOptions &#x3D; {}) {
+        super();
+
+        this.sequenceBits &#x3D; options.sequenceBits || 12;
+        this.randomBits &#x3D; options.randomBits || 10;
+        this.entropyBits &#x3D; options.entropyBits || 5;
+        this.useCrypto &#x3D; options.useCrypto || false;
+        this.maskTimestamp &#x3D; options.maskTimestamp || false;
+        this.enableEventEmission &#x3D; options.enableEventEmission || false;
+        this.machineIdBits &#x3D; options.machineIdBits || 12;
+        this.maxMachineId &#x3D; (1 &lt;&lt; this.machineIdBits) - 1;
+        this.machineIdStrategy &#x3D; options.machineIdStrategy;
+
+        // Use the helper function for machine ID validation
+        this.machineId &#x3D; validateMachineId(this.machineIdStrategy, options.machineId, this.maxMachineId);
+
+        this.maxSequence &#x3D; (1 &lt;&lt; this.sequenceBits) - 1;
+    }
+
+
+
+    /**
+     * Gets the current options of the Hybrid ID generator.
+     *
+     * This getter returns an object containing the configuration settings
+     * and state variables of the Hybrid ID generator, including the number 
+     * of bits used for different components, the current sequence number, 
+     * last generated timestamp, maximum sequence, and maximum machine ID.
+     *
+     * @returns {HybridIDGeneratorOptions &amp; {
+    *   sequence: number;
+    *   lastTimestamp: bigint;
+    *   maxSequence: number;
+    *   maxMachineId: number;
+    * }} The current options and state of the Hybrid ID generator.
+    */
+    get options(): HybridIDGeneratorOptions &amp; {
+        sequence: number;
+        lastTimestamp: bigint;
+        maxSequence: number;
+        maxMachineId: number;
+    } {
+        return {
+            sequenceBits: this.sequenceBits,
+            randomBits: this.randomBits,
+            entropyBits: this.entropyBits,
+            useCrypto: this.useCrypto,
+            maskTimestamp: this.maskTimestamp,
+            enableEventEmission: this.enableEventEmission,
+            machineIdBits: this.machineIdBits,
+            machineId: this.machineId,
+            machineIdStrategy: this.machineIdStrategy as HybridIDGeneratorOptions[&#x27;machineIdStrategy&#x27;],
+            sequence: this.sequence,
+            lastTimestamp: this.lastTimestamp,
+            maxSequence: this.maxSequence,
+            maxMachineId: this.maxMachineId,
+        };
+    }
+
+
+    /**
+     * Generates the next Hybrid ID.
+     *
+     * This method constructs a new Hybrid ID based on the current timestamp,
+     * machine ID, random bits, and sequence number. It handles timestamp 
+     * obfuscation if enabled, ensures unique ID generation by incrementing
+     * the sequence number when necessary, and can emit an event upon ID 
+     * generation. The final Hybrid ID is created by combining these components.
+     *
+     * @returns {HybridID} The newly generated Hybrid ID.
+     */
+    nextId(): HybridID {
+        let timestamp &#x3D; this.getTimestamp();
+        if (this.maskTimestamp) {
+            timestamp &#x3D; obfuscateTimestamp(timestamp);
+        }
+
+        if (timestamp &#x3D;&#x3D;&#x3D; this.lastTimestamp) {
+            this.sequence &#x3D; (this.sequence + 1) &amp; this.maxSequence;
+            if (this.sequence &#x3D;&#x3D;&#x3D; 0) {
+                while (timestamp &lt;&#x3D; this.lastTimestamp) {
+                    timestamp &#x3D; this.getTimestamp();
+                }
+            }
+        } else {
+            this.sequence &#x3D; 0;
+        }
+
+        this.lastTimestamp &#x3D; timestamp;
+        const randomBits &#x3D; generateRandomBits(this.randomBits, this.useCrypto);
+        const hybridId &#x3D; (timestamp &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
+            (BigInt(this.machineId) &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+            (BigInt(randomBits) &lt;&lt; BigInt(this.sequenceBits)) |
+            BigInt(this.sequence);
+
+        if (this.enableEventEmission) {
+            this.emit(&#x27;idGenerated&#x27;, hybridId);
+        }
+
+        return new HybridID(hybridId);
+    }
+
+
+    /**
+     * Generates a batch of Hybrid IDs.
+     *
+     * This method produces a specified number of Hybrid IDs in one call.
+     * It ensures uniqueness by handling sequence numbers and timestamps.
+     * The method optimizes ID generation by preallocating an array for the
+     * result and managing sequence overflow correctly.
+     *
+     * @param {number} batchSize - The number of Hybrid IDs to generate. 
+     * Must be greater than 0.
+     * @throws {Error} If &#x60;batchSize&#x60; is less than or equal to 0.
+     * @returns {HybridID[]} An array of generated Hybrid IDs.
+     */
+    nextIds(batchSize: number): HybridID[] {
+        if (batchSize &lt;&#x3D; 0) {
+            throw new Error(&quot;Batch size must be greater than 0&quot;);
+        }
+
+        // Preallocate the array size for optimization
+        const ids &#x3D; new Array&lt;HybridID&gt;(batchSize);
+
+        let timestamp &#x3D; this.getTimestamp();
+        if (this.maskTimestamp) {
+            timestamp &#x3D; obfuscateTimestamp(timestamp);
+        }
+
+        // Cache the last generated timestamp
+        let lastTimestamp &#x3D; this.lastTimestamp;
+
+        // Loop through the batchSize to generate IDs
+        for (let i &#x3D; 0; i &lt; batchSize; i++) {
+            if (timestamp &#x3D;&#x3D;&#x3D; lastTimestamp) {
+                this.sequence &#x3D; (this.sequence + 1) &amp; this.maxSequence;
+                if (this.sequence &#x3D;&#x3D;&#x3D; 0) {
+                    // Ensure we get a new timestamp when sequence overflows
+                    while (timestamp &lt;&#x3D; lastTimestamp) {
+                        timestamp &#x3D; this.getTimestamp();
+                    }
+                }
+            } else {
+                this.sequence &#x3D; 0; // Reset sequence for new timestamp
+            }
+
+            // Update the cached last timestamp
+            lastTimestamp &#x3D; timestamp;
+            this.lastTimestamp &#x3D; lastTimestamp; // Update the class property
+
+            const randomBits &#x3D; generateRandomBits(this.randomBits, this.useCrypto);
+
+            const hybridId &#x3D; (timestamp &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
+                (BigInt(this.machineId) &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+                (BigInt(randomBits) &lt;&lt; BigInt(this.sequenceBits)) |
+                BigInt(this.sequence);
+
+            // Store ID in the preallocated array
+            ids[i] &#x3D; new HybridID(hybridId);
+
+            // Emit event if enabled
+            if (this.enableEventEmission) {
+                this.emit(&#x27;idGenerated&#x27;, hybridId);
+            }
+        }
+
+        return ids;
+    }
+
+
+    /**
+     * Retrieves the current timestamp in nanoseconds. 
+     * This method provides flexibility to choose between high-resolution timing and wall-clock time.
+     * 
+     * - &#x60;process.hrtime.bigint()&#x60; provides high precision but may not be consistent across runs.
+     * - &#x60;Date.now()&#x60; gives a wall-clock time in milliseconds, which is more consistent across runs.
+     *
+     * You can choose which source of time to use based on your application&#x27;s requirements.
+     * 
+     * @param useHighResTime - A boolean flag indicating whether to use high-resolution time (default is true).
+     * @returns {bigint} The current timestamp in nanoseconds.
+     */
+    getTimestamp(useHighResTime: boolean &#x3D; true): bigint {
+        // Use process.hrtime.bigint() for high precision, 
+        // but also ensure we account for system time consistency.
+        const highResTime &#x3D; process.hrtime.bigint();
+        const wallClockTime &#x3D; BigInt(Date.now()) * BigInt(1_000_000); // Convert to nanoseconds
+
+        // This allows you to decide which source of time you want to use.
+        // You can choose to use either highResTime or wallClockTime depending on your needs.
+        return useHighResTime ? highResTime : wallClockTime;
+    }
+
+    isIdExpired(id: bigint | HybridID, expiryDurationInMillis: number): boolean {
+        if (id instanceof HybridID) {
+            id &#x3D; (id as HybridID).toBigInt();
+        }
+
+        const timestamp &#x3D; id &gt;&gt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits);
+        const currentTimestamp &#x3D; BigInt(process.hrtime.bigint());
+        return (currentTimestamp - timestamp) &gt; BigInt(expiryDurationInMillis * 1_000_000);
+    }
+
+    toBase62(id: bigint | HybridID): string {
+        if (id instanceof HybridID) {
+            id &#x3D; (id as HybridID).toBigInt();
+        }
+
+        return encodeBase62(id);
+    }
+
+    fromBase62(encodedId: string | HybridID): bigint {
+        if (encodedId instanceof HybridID) {
+            encodedId &#x3D; (encodedId as HybridID).toString();
+        }
+
+        return decodeBase62(encodedId);
+    }
+
+    /**
+     * Checks whether the given ID is a valid Hybrid ID.
+     *
+     * This method determines if the input ID is an instance of &#x60;HybridID&#x60;, 
+     * a valid Base62 encoded string, or a bigint that conforms to the 
+     * Hybrid ID structure. It performs various checks on the ID&#x27;s 
+     * components, including the timestamp, machine ID, random bits, 
+     * and sequence number.
+     *
+     * @param {string | bigint | HybridID} id - The ID to validate. 
+     * It can be a string (Base62 encoded), a bigint, or an instance of &#x60;HybridID&#x60;.
+     * 
+     * @returns {id is HybridID} Returns true if the ID is a valid Hybrid ID, 
+     * false otherwise.
+     */
+    isHybridID(id: string | bigint | HybridID): id is HybridID {
+        // If the input is a HybridID, we can return true without further checks
+        if (id instanceof HybridID) {
+            return true;
+        }
+
+        // If the input is a string, we need to check its format and decode it
+        if (typeof id &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) {
+            // Check if the string contains only valid Base62 characters
+            if (!/^[0-9a-zA-Z]+$/.test(id)) {
+                return false;  // Invalid characters for Base62
+            }
+
+            try {
+                // Decode and reassign id if it&#x27;s valid Base62
+                id &#x3D; this.fromBase62(id);
+            } catch {
+                return false;  // Return false if decoding throws an error
+            }
+        }
+
+        // At this point, &#x60;id&#x60; must be of type bigint
+        const totalBits &#x3D; this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
+
+        const timestamp &#x3D; id &gt;&gt; BigInt(totalBits);
+        if (timestamp &lt; 0) return false;  // Timestamp must be non-negative
+
+        const machineIdShift &#x3D; this.sequenceBits + this.randomBits + this.entropyBits;
+        const machineId &#x3D; Number((id &gt;&gt; BigInt(machineIdShift)) &amp; BigInt((1 &lt;&lt; this.machineIdBits) - 1));
+        if (machineId &lt; 0 || machineId &gt; this.maxMachineId) return false;  // Check valid machine ID range
+
+        const randomBits &#x3D; Number((id &gt;&gt; BigInt(this.sequenceBits)) &amp; BigInt((1 &lt;&lt; this.randomBits) - 1));
+        if (randomBits &lt; 0 || randomBits &gt;&#x3D; (1 &lt;&lt; this.randomBits)) return false;  // Valid range for random bits
+
+        const sequence &#x3D; Number(id &amp; BigInt(this.maxSequence));
+        if (sequence &lt; 0 || sequence &gt; this.maxSequence) return false;  // Valid sequence range
+
+        return true; // All checks passed, it&#x27;s a valid Hybrid ID
+    }
+
+
+    /**
+     * Validates the given ID and checks if it is a valid Hybrid ID.
+     *
+     * This method uses the &#x60;isHybridID&#x60; method to validate the ID. 
+     * If the ID is valid, it returns an object indicating the validity 
+     * of the ID. If it is invalid, it provides a reason for the failure.
+     *
+     * @param {bigint | string} id - The ID to validate. 
+     * It can be a bigint or a Base62 encoded string.
+     * 
+     * @returns {{ valid: boolean; reason?: string }} An object containing:
+     * - &#x60;valid&#x60; (boolean): Indicates whether the ID is valid.
+     * - &#x60;reason&#x60; (string, optional): A reason for invalidation if applicable.
+     */
+    validateID(id: bigint | string): { valid: boolean; reason?: string } {
+        if (!this.isHybridID(id)) {
+            return { valid: false, reason: &#x27;Invalid Hybrid ID&#x27; };
+        }
+        return { valid: true };
+    }
+
+
+    /**
+     * Retrieves information about a given Hybrid ID.
+     *
+     * This method extracts various components from the Hybrid ID, including the 
+     * timestamp, machine ID, random bits, and sequence number. If the provided 
+     * ID is in Base62 format or an instance of &#x60;HybridID&#x60;, it converts it to a 
+     * bigint for processing. If the ID is invalid, an error is thrown.
+     *
+     * @param {HybridID | bigint | string} id - The Hybrid ID to extract information from. 
+     * It can be an instance of &#x60;HybridID&#x60;, a bigint, or a Base62 encoded string.
+     * 
+     * @returns {HybridIDInfo} An object containing the extracted information:
+     * - &#x60;timestamp&#x60; (bigint): The timestamp portion of the Hybrid ID. 
+     *   Returns -1 if the timestamp is masked.
+     * - &#x60;machineId&#x60; (number): The machine ID extracted from the Hybrid ID.
+     * - &#x60;randomBits&#x60; (number): The random bits extracted from the Hybrid ID.
+     * - &#x60;sequence&#x60; (number): The sequence number extracted from the Hybrid ID.
+     * - &#x60;masked&#x60; (boolean): Indicates whether the timestamp is masked.
+     * 
+     * @throws {Error} If the provided ID is invalid.
+     */
+    info(id: HybridID | bigint | string): HybridIDInfo {
+        if (id instanceof HybridID) {
+            id &#x3D; (id as HybridID).toBigInt();
+        }
+
+        // check if the id is valid
+        if (!this.isHybridID(id)) {
+            throw new Error(&#x27;Invalid ID&#x27;);
+        }
+
+        if (typeof id &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) {
+            id &#x3D; this.fromBase62(id);  // Convert to bigint if the ID is in Base62 format.
+        }
+
+        const totalBits &#x3D; this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
+
+        // Extract timestamp (shift right to remove the other components)
+        let timestamp &#x3D; id &gt;&gt; BigInt(totalBits);
+
+        // If timestamp is masked, we can&#x27;t reverse obfuscation, but we can flag it
+        let masked &#x3D; this.maskTimestamp;
+
+        // Extract the machine ID
+        const machineIdShift &#x3D; this.sequenceBits + this.randomBits + this.entropyBits;
+        const machineId &#x3D; Number((id &gt;&gt; BigInt(machineIdShift)) &amp; BigInt((1 &lt;&lt; this.machineIdBits) - 1));
+
+        // Extract random bits
+        const randomBits &#x3D; Number((id &gt;&gt; BigInt(this.sequenceBits)) &amp; BigInt((1 &lt;&lt; this.randomBits) - 1));
+
+        // Extract sequence
+        const sequence &#x3D; Number(id &amp; BigInt(this.maxSequence));
+
+        return {
+            timestamp: masked ? BigInt(-1) : timestamp,  // Return -1 if the timestamp is masked
+            machineId,
+            randomBits,
+            sequence,
+            masked,
+        };
+    }
+
+
+}
+
+export default HybridIDGenerator;
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'HybridIDGeneratorOptions.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

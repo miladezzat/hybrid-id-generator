@@ -213,3 +213,6 @@ export class HybridID {
         return new HybridID(randomId);
     }
 }
+
+
+export default HybridID;

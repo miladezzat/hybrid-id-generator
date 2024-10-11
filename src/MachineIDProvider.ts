@@ -164,3 +164,6 @@ export class MachineIDProviderFactory {
         }
     }
 }
+
+
+export default MachineIDProvider;

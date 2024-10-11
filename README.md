@@ -2,16 +2,21 @@
 
 ![npm](https://img.shields.io/npm/v/hybrid-id-generator) ![npm](https://img.shields.io/npm/l/hybrid-id-generator)
 
-A TypeScript-based Hybrid ID Generator that produces unique IDs combining timestamps, machine identifiers, sequences, and random bits. This package is designed for both client-side and server-side use.
+The **Hybrid ID Generator** is a powerful TypeScript-based library designed to produce unique identifiers by seamlessly combining timestamps, machine identifiers, sequence numbers, and random bits. This innovative approach ensures that each generated ID is unique and highly resilient against collisions, making it ideal for distributed systems.
 
-Read more about this package on [This](./purpose.md)
+This package is optimized for versatility and can be effortlessly utilized in both client-side and server-side environments, offering flexibility for a wide range of applications—from web development to microservices architecture.
+
+Whether you are building a high-performance application that requires unique identifiers for database entries or need to track events in real-time, the Hybrid ID Generator provides a reliable solution that meets your needs.
 
 ## Features
-
-- Generates unique IDs based on timestamp, machine ID, random bits, and sequence number.
-- Supports encoding and decoding of IDs to/from Base62 format.
-- Emits events upon ID generation.
-- Checks if an ID has expired based on a specified duration.
+- **Unique ID Generation**: Generates unique IDs based on a combination of timestamp, machine ID, random bits, and sequence number, ensuring uniqueness across different instances.
+- **Base62 Encoding/Decoding**: Supports encoding and decoding of IDs to and from Base62 format, facilitating easier storage and transmission.
+- **Event Emission**: Emits events upon ID generation, allowing seamless integration with other application components and real-time tracking of ID creation.
+- **ID Expiration Check**: Provides functionality to check if an ID has expired based on a specified duration, ensuring IDs are valid only for a predetermined time.
+- **Timestamp Obfuscation**: Offers timestamp obfuscation to enhance security and prevent reverse engineering of ID generation.
+- **ID Validation**: Includes methods to validate the format and structure of generated IDs.
+- **Configuration Options**: Allows customization of parameters such as machine identifiers, sequence numbers, and random bit lengths for flexible use cases.
+- **Cross-Platform Support**: Designed to work seamlessly in both client-side and server-side environments, making it versatile for various applications.
 
 ## Installation
 
@@ -24,71 +29,106 @@ npm install hybrid-id-generator
 ## Usage
 **Importing the Package**
 You can use the package in both CommonJS and ES Module formats:
-    - CommonJS
-  ```js
-  const HybridIDGenerator = require('hybrid-id-generator');
-  ```
-    - ES Module
-  ```ts
-  import HybridIDGenerator from 'hybrid-id-generator';
-  ```
+```ts
+import { HybridIDGenerator } from 'hybrid-id-generator';
+
+const idGenerator = new HybridIDGenerator({
+    machineId: 1, // Unique identifier for the machine
+    randomBits: 10, // Number of random bits
+});
+
+// Generate a single ID
+const uniqueId = idGenerator.nextId();
+console.log(`Generated ID: ${uniqueId}`);
+
+// Check if an ID is valid
+const isValid = idGenerator.isHybridID(uniqueId);
+console.log(`Is valid ID: ${isValid}`);
+
+// Decode an ID
+const decodedId = idGenerator.decode(uniqueId);
+console.log(`Decoded ID:`, decodedId);
+```
 ### Example
 Here’s a quick example of how to use the HybridIDGenerator:
 
 **Server-Side Example**
 ```js
-const HybridIDGenerator = require('hybrid-id-generator');
+import { HybridIDGenerator } from 'hybrid-id-generator';
 
-const idGenerator = new HybridIDGenerator(512, { sequenceBits: 12, randomBits: 10 });
+// Initialize the ID generator with a machine identifier and configuration options.
+const idGenerator = new HybridIDGenerator({
+  sequenceBits: 12,
+  randomBits: 10,
+});
 
-const id = idGenerator.nextId();
+// Generate a new unique ID.
+const id: number = idGenerator.nextId();
 console.log(`Generated ID: ${id}`);
-
-const base62Id = idGenerator.toBase62(id);
-console.log(`Base62 Encoded ID: ${base62Id}`);
-
-const decodedId = idGenerator.fromBase62(base62Id);
-console.log(`Decoded ID: ${decodedId}`);
-
-const isExpired = idGenerator.isIdExpired(id, 1000);
-console.log(`Is ID expired? ${isExpired}`);
 ```
 
 **Client-Side Example**
 ```js
 import HybridIDGenerator from 'hybrid-id-generator'; // Adjust the path as necessary
 
-const idGenerator = new HybridIDGenerator(512, { useCrypto: true });
+// Initialize the ID generator with configuration options.
+const idGenerator = new HybridIDGenerator({
+  sequenceBits: 12,
+  randomBits: 10,
+  useCrypto: true, // Assuming this option is supported in your implementation
+});
 
-const newId = idGenerator.nextId();
+// Generate a new unique ID.
+const newId: number = idGenerator.nextId();
 console.log(`Generated ID: ${newId.toString()}`);
-
-const base62Id = idGenerator.toBase62(newId);
-console.log(`Base62 Encoded ID: ${base62Id}`);
-
-const decodedId = idGenerator.fromBase62(base62Id);
-console.log(`Decoded ID: ${decodedId}`);
-
-const isExpired = idGenerator.isIdExpired(newId, 1000);
-console.log(`Is ID expired? ${isExpired}`);
 ```
 
 ## API
-1. `constructor(machineId: number, options?: Object)`
-   - `machineId`: A number between 0 and 1023.
-   - `options`: Optional configuration object.
-     - `sequenceBits`: Number of bits for the sequence (default: 12).
-     - `randomBits`: Number of bits for the random part (default: 10).
-2. `nextId(): number`
-   - Generates and returns a unique ID.
-3. `toBase62(id: number): string`
-   - Converts the given ID to a Base62 encoded string.
-4. `fromBase62(encodedId: string): number`
-   - Decodes a Base62 encoded string back to the original ID.
-5. `isIdExpired(id: number, expiryDurationInMillis: number): boolean`
-   - Checks if the given ID has expired based on the provided duration in milliseconds.
-6. `info(id: HybridID | bigint | string): HybridIDInfo`
-   - Get the HybridID information
+# HybridIDGenerator API Documentation
+
+## Interfaces
+
+### HybridIDGeneratorOptions
+
+Options for configuring the `HybridIDGenerator`.
+
+| Property               | Type                 | Default | Description                                                                                     |
+|-----------------------|----------------------|---------|-------------------------------------------------------------------------------------------------|
+| `sequenceBits`        | `number`             | `12`    | The number of bits for the sequence component.                                                 |
+| `randomBits`          | `number`             | `10`    | The number of bits for the random component.                                                   |
+| `entropyBits`         | `number`             | `5`     | The number of bits for the entropy component.                                                  |
+| `useCrypto`           | `boolean`            | `false` | Whether to use cryptographic functions for random generation.                                   |
+| `maskTimestamp`       | `boolean`            | `false` | Whether to mask the timestamp during ID generation.                                           |
+| `enableEventEmission` | `boolean`            | `false` | Whether to enable event emission for ID generation.                                            |
+| `machineIdBits`       | `number`             | `12`    | The number of bits for the machine ID component.                                              |
+| `machineIdStrategy`   | `'env' | 'network' | 'random'` | Strategy used for generating the machine ID.                                                   |
+| `machineId`           | `number | string`    | -       | The initial machine ID to use (must be validated).                                            |
+
+### HybridIDInfo
+
+Information about the generated Hybrid ID.
+
+| Property     | Type    | Description                                         |
+|--------------|---------|-----------------------------------------------------|
+| `timestamp`  | `bigint`| The timestamp portion of the Hybrid ID.            |
+| `machineId`  | `number`| The machine ID portion of the Hybrid ID.           |
+| `randomBits` | `number`| The random bits portion of the Hybrid ID.          |
+| `sequence`   | `number`| The sequence number of the Hybrid ID.              |
+| `masked`     | `boolean`| Indicates whether the timestamp is masked.         |
+
+## Class: HybridIDGenerator
+
+### Constructor
+
+```typescript
+constructor(options: HybridIDGeneratorOptions = {})
+```
+Initializes a new instance of `HybridIDGenerator` with the specified options.
+
+
+### Properties
+- **options**: HybridIDGeneratorOptions & { sequence: number; lastTimestamp: bigint; maxSequence: number; maxMachineId: number; }
+    - Gets the current options and state of the Hybrid ID generator.
 
 ## Events
 `idGenerated`

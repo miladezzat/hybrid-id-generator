@@ -177,3 +177,16 @@ export function encodeBase64(input: bigint | string): string {
     }
     return encoded || '0';
 }
+
+
+export default {
+    generateRandomBits,
+    obfuscateTimestamp,
+    validateMachineId,
+    encodeBase62,
+    decodeBase62,
+    encodeBase32,
+    decodeBase32,
+    decodeBase64,
+    encodeBase64
+}
