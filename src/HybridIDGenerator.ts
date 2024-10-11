@@ -238,7 +238,7 @@ export class HybridIDGenerator extends EventEmitter {
             BigInt(this.sequence);
 
         if (this.enableEventEmission) {
-            this.emit('idGenerated', hybridId);
+            this.emit('idGenerated', new HybridID(hybridId));
         }
 
         return new HybridID(hybridId);
@@ -304,7 +304,7 @@ export class HybridIDGenerator extends EventEmitter {
 
             // Emit event if enabled
             if (this.enableEventEmission) {
-                this.emit('idGenerated', hybridId);
+                this.emit('idGenerated', new HybridID(hybridId));
             }
         }
 
@@ -435,6 +435,7 @@ export class HybridIDGenerator extends EventEmitter {
         if (!this.isHybridID(id)) {
             return { valid: false, reason: 'Invalid Hybrid ID' };
         }
+        
         return { valid: true };
     }
 
