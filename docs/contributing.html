@@ -79,9 +79,82 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content package-properties">
+               <div class="content getting-started">
                    <div class="content-data">
 
+<h1>Contributing to hybrid-id-generator</h1>
+<p>First off, thank you for taking the time to contribute! 🎉 Contributions of all kinds are welcome, whether you&#39;re filing issues, submitting patches, improving documentation, or suggesting new features.</p>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#how-to-contribute">How to Contribute</a><ul>
+<li><a href="#reporting-bugs">Reporting Bugs</a></li>
+<li><a href="#requesting-features">Requesting Features</a></li>
+<li><a href="#submitting-a-pull-request">Submitting a Pull Request</a></li>
+<li><a href="#improving-documentation">Improving Documentation</a></li>
+</ul>
+</li>
+<li><a href="#code-of-conduct">Code of Conduct</a></li>
+</ul>
+<h2>How to Contribute</h2>
+<h3>Reporting Bugs</h3>
+<p>If you find a bug in the <code>hybrid-id-generator</code> package, please create an issue to report it:</p>
+<ol>
+<li><strong>Search existing issues</strong> to see if the bug has already been reported. This helps reduce duplicate issues.</li>
+<li>If no issue exists, <a href="https://github.com/miladezzat/hybrid-id-generator/issues/new">create a new issue</a> with the following details:<ul>
+<li>Describe the bug in clear and concise terms.</li>
+<li>Provide steps to reproduce the bug.</li>
+<li>Include the version of <code>hybrid-id-generator</code>, Node.js, and any other relevant details (e.g., operating system).</li>
+<li>If possible, include code snippets or a link to a repository demonstrating the issue.</li>
+</ul>
+</li>
+</ol>
+<p>We will review your report and aim to respond within a few days.</p>
+<h3>Requesting Features</h3>
+<p>We welcome ideas for new features! To request a new feature:</p>
+<ol>
+<li>Check the existing <a href="https://github.com/miladezzat/hybrid-id-generator/issues">issues</a> and <a href="https://github.com/miladezzat/hybrid-id-generator/pulls">pull requests</a> to ensure it hasn&#39;t been suggested or implemented already.</li>
+<li>If the feature doesn&#39;t exist, <a href="https://github.com/miladezzat/hybrid-id-generator/issues/new">create a new issue</a> and provide the following details:<ul>
+<li>Explain the feature and why it&#39;s needed.</li>
+<li>Describe how it could be implemented, if you have ideas.</li>
+<li>Include any alternatives or workarounds you&#39;ve considered.</li>
+</ul>
+</li>
+</ol>
+<p>Once submitted, we will evaluate the request and discuss its feasibility.</p>
+<h3>Submitting a Pull Request</h3>
+<p>Pull requests (PRs) are highly appreciated! To submit a PR:</p>
+<ol>
+<li><strong>Fork the repository</strong> and create your own branch:<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git checkout -b my-feature-branch</code></pre></div></li>
+<li>Make your changes in the new branch. Be sure to follow these guidelines:</li>
+</ol>
+<ul>
+<li>Ensure your code follows the existing style and structure.</li>
+<li>Write unit tests for new features or bug fixes.</li>
+<li>Run tests to make sure everything works (npm test).</li>
+<li>If you&#39;re adding a new feature, make sure to update the documentation if necessary.</li>
+</ul>
+<ol start="3">
+<li>Commit your changes with a meaningful commit message:</li>
+</ol>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git commit -m &quot;Add a new feature for X&quot;</code></pre></div><ol start="4">
+<li>Push to your fork:</li>
+</ol>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git push origin my-feature-branch</code></pre></div><ol start="5">
+<li>Create a pull request (PR) to the main branch of the hybrid-id-generator repository.</li>
+<li>In your PR description, reference any relevant issues (e.g., &quot;Fixes #123&quot;) and explain your changes.</li>
+</ol>
+<p>We will review your PR, give feedback if necessary, and merge it once it&#39;s ready. Please be patient, as this process can take some time depending on the complexity of the change.</p>
+<h3>Improving Documentation</h3>
+<p>Good documentation is key to a successful project! You can contribute by improving the documentation in the following ways:</p>
+<ul>
+<li>Fix typos or unclear sections.</li>
+<li>Add new examples to demonstrate how to use the package.</li>
+<li>Improve the structure of the README or add new guides.</li>
+</ul>
+<p>Feel free to submit a PR for any documentation changes.</p>
+<h3>Code of Conduct</h3>
+<p>This project follows the <a href="./CODE_OF_CONDUCT.md">Contributor Covenant</a>. By participating in this project, you agree to abide by its terms.
+Please treat others with respect and kindness. Harassment, trolling, or any other form of inappropriate behavior will not be tolerated.</p>
 
 
 
@@ -97,27 +170,7 @@
 
 
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">Properties</li>
-    </ol>
-    <ul class="properties-list">
-        <li>
-            <b>Version</b> : 3.0.3</li>
-        <li>
-            <b>Description</b> : A powerful hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create globally unique identifiers. Features collision prevention, Base62 encoding, and optional ID expiry tracking, ideal for distributed systems and high-scale applications.</li>
-        <li>
-            <b>Keywords</b> : id, identifier, unique id, uuid, hybrid id, generator, timestamp, random id, sequence id, collision-free, id expiry, base62, node id, machine id, unique identifier, distributed systems, uuid alternative</li>
-        <li>
-            <b>Homepage</b> : http://nodejs.miladfahmy.me/hybrid-id-generator</li>
-        <li>
-            <b>Bugs</b> : https://github.com/miladezzat/hybrid-id-generator/issues</li>
-        <li>
-            <b>License</b> : MIT</li>
-        <li>
-            <b>Repository</b> : https://github.com/miladezzat/hybrid-id-generator</li>
-        <li>
-            <b>Author</b> : Milad Ezzat</li>
-    </ul>
+
 
 
 
@@ -148,8 +201,8 @@
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'package-properties';
-            var COMPODOC_CURRENT_PAGE_URL = 'properties.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'contributing.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
