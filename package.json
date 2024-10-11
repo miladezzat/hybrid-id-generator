@@ -5,7 +5,8 @@
     "scripts": {
         "build": "tsc",
         "test": "jest",
-        "start": "node dist/index.js"
+        "start": "node dist/index.js",
+        "release": "npx standard-version"
     },
     "author": "Milad Ezzat",
     "description": "A robust and efficient hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create unique identifiers. Supports collision prevention, ID expiry tracking, and Base62 encoding.",

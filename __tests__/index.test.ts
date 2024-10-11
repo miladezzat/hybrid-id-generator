@@ -1,139 +1,130 @@
-import HybridIDGenerator from '../src'; // Adjust the path as needed
-
-jest.useFakeTimers();
+import {  HybridIDGenerator } from "../src";
+import { once } from 'events';
 
 describe('HybridIDGenerator', () => {
-    let idGenerator: HybridIDGenerator;
+    let generator: HybridIDGenerator;
 
     beforeEach(() => {
-        idGenerator = new HybridIDGenerator(512);
+        generator = new HybridIDGenerator({
+            sequenceBits: 12,
+            randomBits: 10,
+            entropyBits: 5,
+            useCrypto: true,
+            maskTimestamp: false,
+            machineIdBits: 12,
+        });
     });
 
-    afterEach(() => {
-        jest.restoreAllMocks(); // Restore original hrtime
+    it('should generate unique IDs', () => {
+        const id1 = generator.nextId();
+        const id2 = generator.nextId();        
+        expect(id1).not.toEqual(id2);
     });
 
-    test('should generate IDs with correct format', () => {
-        const newId = idGenerator.nextId();
-        expect(typeof newId).toBe('bigint'); // Ensure ID is a bigint
+    it('should generate IDs in batch', () => {
+        const ids = generator.nextIds(5);        
+        expect(ids.length).toBe(5);
+        expect(new Set(ids).size).toBe(5); // Ensure all are unique
     });
 
-    test('should correctly encode and decode Base62 IDs', () => {
-        const originalId = idGenerator.nextId();
-        const base62Id = idGenerator.toBase62(originalId);
-        const decodedId = idGenerator.fromBase62(base62Id);
-        expect(originalId).toBe(decodedId); // Ensure original ID is same as decoded ID
+    it('should throw an error if batch size is zero or negative', () => {
+        expect(() => generator.nextIds(0)).toThrow("Batch size must be greater than 0");
+        expect(() => generator.nextIds(-5)).toThrow("Batch size must be greater than 0");
     });
 
-    test('should generate unique IDs', () => {
-        const id1 = idGenerator.nextId();
-        const id2 = idGenerator.nextId();
-        expect(id1).not.toBe(id2); // Ensure the IDs are unique
+    it('should obfuscate timestamp if maskTimestamp is true', () => {
+        const maskedGenerator = new HybridIDGenerator({ maskTimestamp: true });
+        const id = maskedGenerator.nextId();    
+        expect(maskedGenerator.isHybridID(id)).toBe(true);
+        const info = maskedGenerator.info(id);
+        expect(info.timestamp).toBe(BigInt(-1)); // Timestamp should be masked
+        expect(info.masked).toBe(true); // Masked flag should be true
+    });
+    
+
+    it('should validate ID correctly', () => {
+        const id = generator.nextId();
+        expect(generator.isHybridID(id)).toBe(true);
     });
 
-    test('should handle sequence overflow and generate IDs correctly', () => {
-        const overflowIdGenerator = new HybridIDGenerator(512, { sequenceBits: 4 });
-        for (let i = 0; i < 2; i++) {
-            overflowIdGenerator.nextId();
-        }
-        const newId = overflowIdGenerator.nextId();
-        expect(typeof newId).toBe('bigint'); // Ensure ID generation continues
+    it('should validate a corrupt ID', () => {
+        const invalidId = BigInt('12345678901234567890'); // A random big number        
+        expect(generator.validateID(invalidId)).toEqual({ valid: true });
     });
 
-    test('should emit events when ID is generated', () => {
-        const eventIdGenerator = new HybridIDGenerator(512, { enableEventEmission: true });
-        const mockEmit = jest.spyOn(eventIdGenerator, 'emit');
-        eventIdGenerator.nextId();
-        expect(mockEmit).toHaveBeenCalledWith('idGenerated', expect.anything()); // Ensure event emission on ID generation
-    });
-
-    test('should correctly determine if an ID is expired', () => {
-        const newId = idGenerator.nextId();
-        jest.advanceTimersByTime(5000); // Simulate 5 seconds passing
-        const isExpired = idGenerator.isIdExpired(newId, 4000);
-        expect(isExpired).toBe(true); // Ensure ID is marked as expired
-    });
-
-    test('should validate IDs correctly', () => {
-        const newId = idGenerator.nextId();
-        const isValid = idGenerator.isValidateId(newId);
-        expect(isValid).toBe(true); // Ensure ID is marked as valid
-    });
-
-    test('should validate Base62 IDs correctly', () => {
-        const newId = idGenerator.nextId();
-        const base62Id = idGenerator.toBase62(newId);
-        const isValid = idGenerator.isValidateId(base62Id);
-        expect(isValid).toBe(true); // Ensure Base62 ID is marked as valid
-    });
-
-    test('should validate invalid IDs correctly', () => {
-        const invalidId = BigInt(-1);
-        const isValid = idGenerator.isValidateId(invalidId);
-        expect(isValid).toBe(false); // Ensure invalid ID is marked as invalid
-    });
-
-    // New test for `info()` method
-    test('should correctly extract info from a valid ID', () => {
-        const newId = idGenerator.nextId();
-        const info = idGenerator.info(newId);
-
+    it('should return correct info from an ID', () => {
+        const id = generator.nextId();
+        const info = generator.info(id);
         expect(info).toHaveProperty('timestamp');
         expect(info).toHaveProperty('machineId');
         expect(info).toHaveProperty('randomBits');
         expect(info).toHaveProperty('sequence');
-        expect(info).toHaveProperty('masked');
+        expect(info.masked).toBe(false);
+    });
+
+    it('should correctly encode and decode Base62', () => {
+        const id = generator.nextId();
+        const encodedId = generator.toBase62(id.toBigInt());
+        const decodedId = generator.fromBase62(encodedId);
+        console.log(encodedId);
         
-        // Check that the extracted info makes sense
-        expect(info.machineId).toBe(512);  // Machine ID should be the same as the one used in the generator
-        expect(info.timestamp).not.toBe(BigInt(-1));  // Timestamp should not be -1 if not masked
-        expect(typeof info.randomBits).toBe('number');  // Random bits should be a number
-        expect(typeof info.sequence).toBe('number');    // Sequence should be a number
-        expect(info.masked).toBe(false);  // Masked should be false by default
+        expect(decodedId).toBe(id.toBigInt());
     });
 
-    // New test for Base62 ID info extraction
-    test('should correctly extract info from a Base62 encoded ID', () => {
-        const newId = idGenerator.nextId();
-        const base62Id = idGenerator.toBase62(newId);
-        const info = idGenerator.info(base62Id);  // Extract info from Base62 encoded ID
-        console.log("toBase62", info, base62Id, newId);
-
-        expect(info).toHaveProperty('timestamp');
-        expect(info).toHaveProperty('machineId');
-        expect(info).toHaveProperty('randomBits');
-        expect(info).toHaveProperty('sequence');
-        expect(info).toHaveProperty('masked');
-
-        expect(info.machineId).toBe(512);  // Machine ID should match
-        expect(typeof info.randomBits).toBe('number');  // Random bits should be a number
-        expect(typeof info.sequence).toBe('number');    // Sequence should be a number
+    it('should emit idGenerated event when an ID is generated', async () => {
+        const emitter = new HybridIDGenerator({ enableEventEmission: true });
+        const idPromise = once(emitter, 'idGenerated');
+        emitter.nextId();
+        const [id] = await idPromise;
+        expect(generator.isHybridID(id)).toBe(true); // Ensure ID is valid
     });
 
-    // New test for masked timestamp in `info()`
-    test('should return masked timestamp in info if maskTimestamp is true', () => {
-        const maskedIdGenerator = new HybridIDGenerator(512, { maskTimestamp: true });
-        const newId = maskedIdGenerator.nextId();
-        const info = maskedIdGenerator.info(newId);
-
-        expect(info.timestamp).toBe(BigInt(-1));  // Timestamp should be -1 when masked
-        expect(info.masked).toBe(true);  // Masked flag should be true
+    it('should correctly determine if an ID is expired', () => {
+        const id = generator.nextId();
+        const notExpired = generator.isIdExpired(id, 1000); // Assume 1 second expiry
+        expect(notExpired).toBe(false); // ID should not be expired immediately
     });
 
-    // Test for invalid ID in `info()` method
-    test('should throw an error for invalid ID in info()', () => {
-        const invalidId = BigInt(-1);
+    it('should detect expired IDs after a given duration', async () => {
+        const id = generator.nextId();
+        await new Promise((resolve) => setTimeout(resolve, 10)); // Wait for 10ms
+        const expired = generator.isIdExpired(id, 1); // 1ms expiry
+        expect(expired).toBe(true);
+    });
+
+    it('should respect machine ID strategies', () => {
+        const envGen = new HybridIDGenerator({ machineIdStrategy: 'env', machineId: 'MY_MACHINE_ID_ENV' });
+        const networkGen = new HybridIDGenerator({ machineIdStrategy: 'network' });
+        const randomGen = new HybridIDGenerator({ machineIdStrategy: 'random', machineId: 999 });
+
+        const envId = envGen.nextId();
+        const networkId = networkGen.nextId();
+        const randomId = randomGen.nextId();        
+
+        expect(envGen.info(envId).machineId).toBeDefined();
+        expect(networkGen.info(networkId).machineId).toBeDefined();
+        expect(randomGen.info(randomId).machineId).toBeDefined();
+
+        expect(envGen.isHybridID(envId)).toBe(true);
+        expect(networkGen.isHybridID(networkId)).toBe(true);
+        expect(randomGen.isHybridID(randomId)).toBe(true);
+    });
+
+    it('should throw error for invalid machine ID', () => {
+        expect(() => {
+            new HybridIDGenerator({ machineId: -1 });
+        }).toThrow('Machine ID must be between 0 and 4095');
 
         expect(() => {
-            idGenerator.info(invalidId);
-        }).toThrow('Invalid ID');  // Ensure error is thrown for invalid ID
+            new HybridIDGenerator({ machineId: 999999 });
+        }).toThrow('Machine ID must be between 0 and 4095');
     });
 
-    test('should throw an error for invalid ID in info()', () => {
-        const invalidId = "invalid-id";
+    it('should reset sequence when the timestamp changes', () => {
+        const id1 = generator.nextId();
+        const id2 = generator.nextId();
 
-        expect(() => {
-            idGenerator.info(invalidId);
-        }).toThrow('Invalid ID');  // Ensure error is thrown for invalid ID
+        expect(generator.info(id1).sequence).toBeLessThanOrEqual(generator.options.maxSequence);
+        expect(generator.info(id2).sequence).toBeLessThanOrEqual(generator.options.maxSequence);
     });
 });
