@@ -1,6 +1,8 @@
 {
     "name": "hybrid-id-generator",
-    "version": "3.0.0",
+    "version": "3.0.1",
+    "description": "A robust and efficient hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create unique identifiers. Supports collision prevention, ID expiry tracking, and Base62 encoding.",
+    "author": "Milad Ezzat",
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
@@ -8,8 +10,6 @@
         "start": "node dist/index.js",
         "release": "npx standard-version"
     },
-    "author": "Milad Ezzat",
-    "description": "A robust and efficient hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create unique identifiers. Supports collision prevention, ID expiry tracking, and Base62 encoding.",
     "license": "MIT",
     "keywords": [
         "id",
@@ -19,9 +19,12 @@
         "generator"
     ],
     "devDependencies": {
+        "@compodoc/compodoc": "^1.1.25",
         "@types/jest": "^29.5.13",
         "@types/node": "^22.7.4",
+        "docdash": "^2.0.2",
         "jest": "^29.7.0",
+        "jsdoc": "^4.0.3",
         "ts-jest": "^29.2.5",
         "typescript": "^5.6.2"
     },
