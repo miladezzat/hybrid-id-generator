@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.4](https://github.com/miladezzat/hybrid-id-generator/compare/v3.0.3...v3.0.4) (2026-01-31)
+
+
+### Bug Fixes
+
+* timestamp default, machine ID providers, entropy, validation, browser support; README comparison and release docs ([1ffe1de](https://github.com/miladezzat/hybrid-id-generator/commit/1ffe1deb04b79e172af356dce020899e16b620d1))
+
 ### [3.0.3](https://github.com/miladezzat/hybrid-id-generator/compare/v3.0.2...v3.0.3) (2024-10-11)
 
 ### [3.0.2](https://github.com/miladezzat/hybrid-id-generator/compare/v3.0.1...v3.0.2) (2024-10-11)
