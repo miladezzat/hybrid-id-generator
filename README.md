@@ -168,17 +168,18 @@ idGenerator.nextId();
 
 ## Releasing
 
-Release is **prepared locally**; **publishing to npm is done by GitHub Actions** when you push a version tag.
+Release is **prepared locally**; **publishing to npm is done by GitHub Actions** when you push a **version tag**.
 
 1. **Prepare** (bump version, update CHANGELOG, create tag; no publish):
    ```bash
    npm run prepare-release
    ```
-2. **Push** the new commit and tag to trigger the publish workflow:
+2. **Push the branch and the tag** (the tag is required for the action to publish):
    ```bash
    git push --follow-tags
    ```
-3. The [Publish Package](.github/workflows/publish.yml) workflow runs on the tag, runs build + tests, then publishes to npm. Ensure the repo secret `NPM_TOKEN` is set.
+   If you only run `git push`, the new tag (e.g. `v3.1.0`) is not pushed and the workflow will not publish. Use `--follow-tags` or `git push origin v3.1.0`.
+3. The [Publish Package](.github/workflows/publish.yml) workflow runs when the tag is pushed, runs build + tests, then publishes to npm. Ensure the repo secret **NPM_TOKEN** is set in Settings → Secrets and variables → Actions.
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or feature requests.

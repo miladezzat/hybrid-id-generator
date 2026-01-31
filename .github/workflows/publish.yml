@@ -1,9 +1,11 @@
-# Publish to npm when a version tag is pushed. You only prepare the release locally.
-# Local: npm run prepare-release  →  git push --follow-tags  →  This workflow publishes.
+# Publish to npm when a version tag is pushed.
+# After prepare-release: use "git push --follow-tags" so the tag is pushed and this runs.
 name: Publish Package
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -13,11 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write   # for npm provenance (optional)
+      id-token: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -42,3 +46,10 @@ jobs:
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Hint when tag was not pushed
+        if: github.ref_type != 'tag' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        run: |
+          echo "::notice:: Build and test passed. To publish to npm, push your version tag:"
+          echo "  git push --follow-tags"
+          echo "Or: git push origin \$(git describe --tags --abbrev=0)"
