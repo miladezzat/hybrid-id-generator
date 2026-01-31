@@ -1,34 +1,44 @@
+# Publish to npm when a version tag is pushed. You only prepare the release locally.
+# Local: npm run prepare-release  →  git push --follow-tags  →  This workflow publishes.
 name: Publish Package
 
 on:
   push:
-    branches:
-      - main  # This triggers the workflow on pushes to the main branch
+    tags:
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # for npm provenance (optional)
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'  # Specify the Node.js version
-          registry-url: 'https://registry.npmjs.org/'  # npm registry
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org/'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build project
-        run: npm run build  # Assuming you have a build script in your package.json
+      - name: Build
+        run: npm run build
 
-      - name: Run tests
+      - name: Test
         run: npm test
+        env:
+          CI: true
 
       - name: Publish to npm
+        if: github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
+        run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Use the npm token from secrets
-        run: npm publish
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

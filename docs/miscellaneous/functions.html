@@ -133,6 +133,9 @@
                             <a href="#generateRandomBits" title="src/utils.ts" ><b>generateRandomBits</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
                         </li>
                         <li>
+                            <a href="#getNodeCrypto" title="src/utils.ts" ><b>getNodeCrypto</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                        </li>
+                        <li>
                             <a href="#obfuscateTimestamp" title="src/utils.ts" ><b>obfuscateTimestamp</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
                         </li>
                         <li>
@@ -562,7 +565,8 @@
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Generates random bits with an option to use either cryptographic or non-cryptographic random number generation.</p>
+                        <div class="io-description"><p>Generates random bits with an option to use either cryptographic or non-cryptographic random number generation.
+When useCrypto is true: uses globalThis.crypto.getRandomValues (browser/Node 19+) or Node crypto.randomBytes.</p>
 </div>
 
                             <div class="io-description">
@@ -633,6 +637,37 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getNodeCrypto"></a>
+                    <span class="name">
+                        <span ><b>getNodeCrypto</b></span>
+                        <a href="#getNodeCrypto"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNodeCrypto()</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code> | null</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="obfuscateTimestamp"></a>
                     <span class="name">
                         <span ><b>obfuscateTimestamp</b></span>
@@ -651,7 +686,7 @@
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Obfuscates a timestamp using SHA-256 hashing.
+                        <div class="io-description"><p>Obfuscates a timestamp using SHA-256 hashing (Node.js crypto only).
 The first 16 characters of the hash are used to create a bigint representation.</p>
 </div>
 
@@ -770,7 +805,9 @@ The first 16 characters of the hash are used to create a bigint representation.<
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Validates and returns a machine ID based on the specified strategy.</p>
+                        <div class="io-description"><p>Validates and returns a machine ID for explicit numeric use.
+Used when no strategy is set, or when strategy is &#39;random&#39; (number required).
+For &#39;env&#39; and &#39;network&#39; strategies, HybridIDGenerator uses MachineIDProviderFactory instead.</p>
 </div>
 
                             <div class="io-description">
@@ -798,7 +835,7 @@ The first 16 characters of the hash are used to create a bigint representation.<
 
                                             <td>
                                                     <ul>
-<li>The strategy for generating or retrieving the machine ID (&#39;env&#39;, &#39;random&#39;, or undefined).</li>
+<li>The strategy (&#39;random&#39; or undefined).</li>
 </ul>
 
                                             </td>
@@ -815,7 +852,7 @@ The first 16 characters of the hash are used to create a bigint representation.<
 
                                             <td>
                                                     <ul>
-<li>The machine ID to validate, based on the strategy.</li>
+<li>The machine ID to validate (number when strategy is &#39;random&#39;).</li>
 </ul>
 
                                             </td>

@@ -47,9 +47,12 @@ describe('HybridIDGenerator', () => {
         expect(generator.isHybridID(id)).toBe(true);
     });
 
-    it('should validate a corrupt ID', () => {
-        const invalidId = BigInt('12345678901234567890'); // A random big number        
-        expect(generator.validateID(invalidId)).toEqual({ valid: true });
+    it('should reject a corrupt or out-of-range ID', () => {
+        const totalBits = 12 + 10 + 5 + 12;
+        const maxTimestamp = (BigInt(1) << BigInt(42)) - BigInt(1);
+        const invalidTimestamp = maxTimestamp + BigInt(2);
+        const invalidId = invalidTimestamp << BigInt(totalBits);
+        expect(generator.validateID(invalidId)).toEqual({ valid: false, reason: 'Invalid Hybrid ID' });
     });
 
     it('should return correct info from an ID', () => {
@@ -62,12 +65,18 @@ describe('HybridIDGenerator', () => {
         expect(info.masked).toBe(false);
     });
 
+    it('should have timestamp within configured bit range (wall-clock)', () => {
+        const id = generator.nextId();
+        const info = generator.info(id);
+        expect(info.masked).toBe(false);
+        expect(info.timestamp >= BigInt(0)).toBe(true);
+        expect(info.timestamp <= generator.options.maxTimestamp).toBe(true);
+    });
+
     it('should correctly encode and decode Base62', () => {
         const id = generator.nextId();
         const encodedId = generator.toBase62(id.toBigInt());
         const decodedId = generator.fromBase62(encodedId);
-        console.log(encodedId);
-        
         expect(decodedId).toBe(id.toBigInt());
     });
 
@@ -93,7 +102,12 @@ describe('HybridIDGenerator', () => {
     });
 
     it('should respect machine ID strategies', () => {
-        const envGen = new HybridIDGenerator({ machineIdStrategy: 'env', machineId: 'MY_MACHINE_ID_ENV' });
+        const envVar = 'HYBRID_ID_TEST_MACHINE_ID';
+        const orig = process.env[envVar];
+        process.env[envVar] = '42';
+        const envGen = new HybridIDGenerator({ machineIdStrategy: 'env', machineId: envVar });
+        if (orig !== undefined) process.env[envVar] = orig;
+        else delete process.env[envVar];
         const networkGen = new HybridIDGenerator({ machineIdStrategy: 'network' });
         const randomGen = new HybridIDGenerator({ machineIdStrategy: 'random', machineId: 999 });
 

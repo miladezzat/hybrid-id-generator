@@ -183,6 +183,10 @@
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
+                                <a href="#maxTimestamp" >maxTimestamp</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
                                 <a href="#randomBits" >randomBits</a>
                             </li>
                             <li>
@@ -195,7 +199,15 @@
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
+                                <a href="#timestampBits" >timestampBits</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
                                 <a href="#useCrypto" >useCrypto</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#useWallClock" >useWallClock</a>
                             </li>
                         </ul>
                     </td>
@@ -273,7 +285,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="124" class="link-to-prism">src/HybridIDGenerator.ts:124</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="146" class="link-to-prism">src/HybridIDGenerator.ts:146</a></div>
                             </td>
                         </tr>
 
@@ -348,7 +360,7 @@ as well as the machine ID and options for masking and event emission.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="96" class="link-to-prism">src/HybridIDGenerator.ts:96</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="100" class="link-to-prism">src/HybridIDGenerator.ts:100</a></div>
                         </td>
                     </tr>
 
@@ -381,7 +393,7 @@ as well as the machine ID and options for masking and event emission.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/HybridIDGenerator.ts:75</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/HybridIDGenerator.ts:79</a></div>
                         </td>
                     </tr>
 
@@ -413,7 +425,7 @@ as well as the machine ID and options for masking and event emission.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/HybridIDGenerator.ts:54</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/HybridIDGenerator.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -448,7 +460,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/HybridIDGenerator.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/HybridIDGenerator.ts:39</a></div>
                         </td>
                     </tr>
 
@@ -481,7 +493,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="117" class="link-to-prism">src/HybridIDGenerator.ts:117</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="121" class="link-to-prism">src/HybridIDGenerator.ts:121</a></div>
                         </td>
                     </tr>
 
@@ -514,7 +526,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="124" class="link-to-prism">src/HybridIDGenerator.ts:124</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">src/HybridIDGenerator.ts:128</a></div>
                         </td>
                     </tr>
 
@@ -547,7 +559,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="89" class="link-to-prism">src/HybridIDGenerator.ts:89</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/HybridIDGenerator.ts:93</a></div>
                         </td>
                     </tr>
 
@@ -580,7 +592,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="110" class="link-to-prism">src/HybridIDGenerator.ts:110</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="114" class="link-to-prism">src/HybridIDGenerator.ts:114</a></div>
                         </td>
                     </tr>
 
@@ -613,13 +625,40 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="103" class="link-to-prism">src/HybridIDGenerator.ts:103</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="107" class="link-to-prism">src/HybridIDGenerator.ts:107</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>The maximum value for the sequence component based on the number of bits allocated.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="maxTimestamp"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>maxTimestamp</b></span>
+                        <a href="#maxTimestamp"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="146" class="link-to-prism">src/HybridIDGenerator.ts:146</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Maximum timestamp value (2^timestampBits - 1) for capping.</p>
 </div>
                 </td>
             </tr>
@@ -646,7 +685,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/HybridIDGenerator.ts:68</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/HybridIDGenerator.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -684,7 +723,7 @@ during ID generation.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/HybridIDGenerator.ts:44</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/HybridIDGenerator.ts:48</a></div>
                         </td>
                     </tr>
 
@@ -718,13 +757,46 @@ This resets to 0 when the timestamp changes.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/HybridIDGenerator.ts:61</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/HybridIDGenerator.ts:65</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>The number of bits allocated for the sequence component of the Hybrid ID.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="timestampBits"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>timestampBits</b></span>
+                        <a href="#timestampBits"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="134" class="link-to-prism">src/HybridIDGenerator.ts:134</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The number of bits allocated for the timestamp component (default 42 = ms since Unix epoch).</p>
 </div>
                 </td>
             </tr>
@@ -751,13 +823,46 @@ This resets to 0 when the timestamp changes.</p>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/HybridIDGenerator.ts:82</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/HybridIDGenerator.ts:86</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Flag indicating whether to use cryptographic functions for random number generation.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="useWallClock"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>useWallClock</b></span>
+                        <a href="#useWallClock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="140" class="link-to-prism">src/HybridIDGenerator.ts:140</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>If true, use wall-clock time (Date.now()) for chronological order and expiry.</p>
 </div>
                 </td>
             </tr>
@@ -791,8 +896,8 @@ This resets to 0 when the timestamp changes.</p>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="356"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:356</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="416"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:416</a></div>
                         </td>
                     </tr>
 
@@ -844,28 +949,24 @@ This resets to 0 when the timestamp changes.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getTimestamp(useHighResTime: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>getTimestamp(useHighResTime?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="327"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:327</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="370"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:370</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Retrieves the current timestamp in nanoseconds.
-This method provides flexibility to choose between high-resolution timing and wall-clock time.</p>
-<ul>
-<li><code>process.hrtime.bigint()</code> provides high precision but may not be consistent across runs.</li>
-<li><code>Date.now()</code> gives a wall-clock time in milliseconds, which is more consistent across runs.</li>
-</ul>
-<p>You can choose which source of time to use based on your application&#39;s requirements.</p>
+                        <div class="io-description"><p>Retrieves the current timestamp, capped to timestampBits.
+Default: wall-clock time (Date.now() in ms) for real-world chronological order and expiry.
+Optional: process.hrtime.bigint() (monotonic, process-specific) when useWallClock is false.</p>
 </div>
 
                             <div class="io-description">
@@ -877,7 +978,6 @@ This method provides flexibility to choose between high-resolution timing and wa
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Default value</td>
                                                 <td>Description</td>
                                         </tr>
                                     </thead>
@@ -889,16 +989,13 @@ This method provides flexibility to choose between high-resolution timing and wa
                                             </td>
 
                                             <td>
-                                                    No
+                                                    Yes
                                             </td>
 
-                                            <td>
-                                                    <code>true</code>
-                                            </td>
 
                                             <td>
                                                     <ul>
-<li>A boolean flag indicating whether to use high-resolution time (default is true).</li>
+<li>Override: if true use process.hrtime.bigint() (when available), else Date.now() ms. Default follows options.useWallClock.</li>
 </ul>
 
                                             </td>
@@ -930,8 +1027,8 @@ This method provides flexibility to choose between high-resolution timing and wa
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="464"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:464</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="525"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:525</a></div>
                         </td>
                     </tr>
 
@@ -1029,8 +1126,8 @@ Returns -1 if the timestamp is masked.</li>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="379"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:379</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="439"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:439</a></div>
                         </td>
                     </tr>
 
@@ -1115,8 +1212,8 @@ false otherwise.</p>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="338"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:338</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="384"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:384</a></div>
                         </td>
                     </tr>
 
@@ -1194,8 +1291,8 @@ false otherwise.</p>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="216"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:216</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="259"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:259</a></div>
                         </td>
                     </tr>
 
@@ -1242,8 +1339,8 @@ generation. The final Hybrid ID is created by combining these components.</p>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="261"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:261</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="306"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:306</a></div>
                         </td>
                     </tr>
 
@@ -1325,8 +1422,8 @@ Must be greater than 0.</li>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="348"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:348</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="408"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:408</a></div>
                         </td>
                     </tr>
 
@@ -1392,8 +1489,8 @@ Must be greater than 0.</li>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="434"
-                                    class="link-to-prism">src/HybridIDGenerator.ts:434</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="495"
+                                    class="link-to-prism">src/HybridIDGenerator.ts:495</a></div>
                         </td>
                     </tr>
 
@@ -1488,7 +1585,7 @@ It can be a bigint or a Base62 encoded string.</li>
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="181" class="link-to-prism">src/HybridIDGenerator.ts:181</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="218" class="link-to-prism">src/HybridIDGenerator.ts:218</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -1519,7 +1616,7 @@ last generated timestamp, maximum sequence, and maximum machine ID.</p>
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { EventEmitter } from &#x27;events&#x27;;
 import { generateRandomBits, obfuscateTimestamp, encodeBase62, decodeBase62, validateMachineId } from &#x27;./utils&#x27;;
-import { MachineIDStrategy } from &quot;./MachineIDProvider&quot;;
+import { MachineIDStrategy, MachineIDProviderFactory } from &quot;./MachineIDProvider&quot;;
 import { HybridID } from &#x27;./HybridID&#x27;;
 
 
@@ -1533,6 +1630,10 @@ export interface HybridIDGeneratorOptions {
     machineIdBits?: number;
     machineId?: number | string;
     machineIdStrategy?: &#x27;env&#x27; | &#x27;network&#x27; | &#x27;random&#x27;; // this is the machine id provider strategy
+    /** Number of bits for timestamp (default 42 &#x3D; ms since Unix epoch, ~139 years). */
+    timestampBits?: number;
+    /** If true, use wall-clock time (Date.now()) for chronological order and expiry; if false, use process.hrtime.bigint() (monotonic, process-specific). Default true. */
+    useWallClock?: boolean;
 }
 
 export interface HybridIDInfo {
@@ -1640,6 +1741,24 @@ export class HybridIDGenerator extends EventEmitter {
      */
     private machineIdStrategy: MachineIDStrategy;
 
+    /**
+     * The number of bits allocated for the timestamp component (default 42 &#x3D; ms since Unix epoch).
+     * @private
+     */
+    private timestampBits: number;
+
+    /**
+     * If true, use wall-clock time (Date.now()) for chronological order and expiry.
+     * @private
+     */
+    private useWallClock: boolean;
+
+    /**
+     * Maximum timestamp value (2^timestampBits - 1) for capping.
+     * @private
+     */
+    private maxTimestamp: bigint;
+
 
     /**
      * Constructs a new Hybrid ID generator with the specified options.
@@ -1658,6 +1777,8 @@ export class HybridIDGenerator extends EventEmitter {
      * @param {number} [options.machineIdBits&#x3D;12] - The number of bits for the machine ID component (default: 12).
      * @param {MachineIDStrategy} [options.machineIdStrategy] - The strategy used for generating the machine ID.
      * @param {number} [options.machineId] - The initial machine ID to use (must be validated).
+     * @param {number} [options.timestampBits&#x3D;42] - The number of bits for the timestamp (default: 42, ms since Unix epoch).
+     * @param {boolean} [options.useWallClock&#x3D;true] - Use wall-clock time (Date.now()) for ordering and expiry (default: true).
      */
     constructor(options: HybridIDGeneratorOptions &#x3D; {}) {
         super();
@@ -1671,9 +1792,22 @@ export class HybridIDGenerator extends EventEmitter {
         this.machineIdBits &#x3D; options.machineIdBits || 12;
         this.maxMachineId &#x3D; (1 &lt;&lt; this.machineIdBits) - 1;
         this.machineIdStrategy &#x3D; options.machineIdStrategy;
+        this.timestampBits &#x3D; options.timestampBits ?? 42;
+        this.useWallClock &#x3D; options.useWallClock !&#x3D;&#x3D; false;
+        this.maxTimestamp &#x3D; (BigInt(1) &lt;&lt; BigInt(this.timestampBits)) - BigInt(1);
 
-        // Use the helper function for machine ID validation
-        this.machineId &#x3D; validateMachineId(this.machineIdStrategy, options.machineId, this.maxMachineId);
+        // Resolve machine ID: use providers for env/network, validateMachineId for random or explicit numeric
+        if (this.machineIdStrategy &#x3D;&#x3D;&#x3D; &#x27;env&#x27; || this.machineIdStrategy &#x3D;&#x3D;&#x3D; &#x27;network&#x27;) {
+            const value &#x3D; this.machineIdStrategy &#x3D;&#x3D;&#x3D; &#x27;env&#x27; ? options.machineId as string : undefined;
+            const provider &#x3D; MachineIDProviderFactory.createMachineIDProvider(this.machineIdStrategy, value);
+            let resolved &#x3D; provider.getMachineId();
+            if (resolved &lt; 0 || resolved &gt; this.maxMachineId) {
+                resolved &#x3D; ((resolved % (this.maxMachineId + 1)) + (this.maxMachineId + 1)) % (this.maxMachineId + 1);
+            }
+            this.machineId &#x3D; resolved;
+        } else {
+            this.machineId &#x3D; validateMachineId(this.machineIdStrategy, options.machineId, this.maxMachineId);
+        }
 
         this.maxSequence &#x3D; (1 &lt;&lt; this.sequenceBits) - 1;
     }
@@ -1700,6 +1834,9 @@ export class HybridIDGenerator extends EventEmitter {
         lastTimestamp: bigint;
         maxSequence: number;
         maxMachineId: number;
+        timestampBits: number;
+        useWallClock: boolean;
+        maxTimestamp: bigint;
     } {
         return {
             sequenceBits: this.sequenceBits,
@@ -1711,6 +1848,9 @@ export class HybridIDGenerator extends EventEmitter {
             machineIdBits: this.machineIdBits,
             machineId: this.machineId,
             machineIdStrategy: this.machineIdStrategy as HybridIDGeneratorOptions[&#x27;machineIdStrategy&#x27;],
+            timestampBits: this.timestampBits,
+            useWallClock: this.useWallClock,
+            maxTimestamp: this.maxTimestamp,
             sequence: this.sequence,
             lastTimestamp: this.lastTimestamp,
             maxSequence: this.maxSequence,
@@ -1733,7 +1873,7 @@ export class HybridIDGenerator extends EventEmitter {
     nextId(): HybridID {
         let timestamp &#x3D; this.getTimestamp();
         if (this.maskTimestamp) {
-            timestamp &#x3D; obfuscateTimestamp(timestamp);
+            timestamp &#x3D; obfuscateTimestamp(timestamp) &amp; this.maxTimestamp;
         }
 
         if (timestamp &#x3D;&#x3D;&#x3D; this.lastTimestamp) {
@@ -1749,8 +1889,10 @@ export class HybridIDGenerator extends EventEmitter {
 
         this.lastTimestamp &#x3D; timestamp;
         const randomBits &#x3D; generateRandomBits(this.randomBits, this.useCrypto);
+        const entropyValue &#x3D; generateRandomBits(this.entropyBits, this.useCrypto);
         const hybridId &#x3D; (timestamp &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
             (BigInt(this.machineId) &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+            (BigInt(entropyValue) &lt;&lt; BigInt(this.sequenceBits + this.randomBits)) |
             (BigInt(randomBits) &lt;&lt; BigInt(this.sequenceBits)) |
             BigInt(this.sequence);
 
@@ -1785,7 +1927,7 @@ export class HybridIDGenerator extends EventEmitter {
 
         let timestamp &#x3D; this.getTimestamp();
         if (this.maskTimestamp) {
-            timestamp &#x3D; obfuscateTimestamp(timestamp);
+            timestamp &#x3D; obfuscateTimestamp(timestamp) &amp; this.maxTimestamp;
         }
 
         // Cache the last generated timestamp
@@ -1810,9 +1952,11 @@ export class HybridIDGenerator extends EventEmitter {
             this.lastTimestamp &#x3D; lastTimestamp; // Update the class property
 
             const randomBits &#x3D; generateRandomBits(this.randomBits, this.useCrypto);
+            const entropyValue &#x3D; generateRandomBits(this.entropyBits, this.useCrypto);
 
             const hybridId &#x3D; (timestamp &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
                 (BigInt(this.machineId) &lt;&lt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+                (BigInt(entropyValue) &lt;&lt; BigInt(this.sequenceBits + this.randomBits)) |
                 (BigInt(randomBits) &lt;&lt; BigInt(this.sequenceBits)) |
                 BigInt(this.sequence);
 
@@ -1830,36 +1974,49 @@ export class HybridIDGenerator extends EventEmitter {
 
 
     /**
-     * Retrieves the current timestamp in nanoseconds. 
-     * This method provides flexibility to choose between high-resolution timing and wall-clock time.
-     * 
-     * - &#x60;process.hrtime.bigint()&#x60; provides high precision but may not be consistent across runs.
-     * - &#x60;Date.now()&#x60; gives a wall-clock time in milliseconds, which is more consistent across runs.
+     * Retrieves the current timestamp, capped to timestampBits.
+     * Default: wall-clock time (Date.now() in ms) for real-world chronological order and expiry.
+     * Optional: process.hrtime.bigint() (monotonic, process-specific) when useWallClock is false.
      *
-     * You can choose which source of time to use based on your application&#x27;s requirements.
-     * 
-     * @param useHighResTime - A boolean flag indicating whether to use high-resolution time (default is true).
-     * @returns {bigint} The current timestamp in nanoseconds.
+     * @param useHighResTime - Override: if true use process.hrtime.bigint() (when available), else Date.now() ms. Default follows options.useWallClock.
+     * @returns {bigint} The current timestamp (ms if wall-clock, capped to timestampBits; else hrtime ns capped).
      */
-    getTimestamp(useHighResTime: boolean &#x3D; true): bigint {
-        // Use process.hrtime.bigint() for high precision, 
-        // but also ensure we account for system time consistency.
-        const highResTime &#x3D; process.hrtime.bigint();
-        const wallClockTime &#x3D; BigInt(Date.now()) * BigInt(1_000_000); // Convert to nanoseconds
-
-        // This allows you to decide which source of time you want to use.
-        // You can choose to use either highResTime or wallClockTime depending on your needs.
-        return useHighResTime ? highResTime : wallClockTime;
+    getTimestamp(useHighResTime?: boolean): bigint {
+        const useWall &#x3D; useHighResTime &#x3D;&#x3D;&#x3D; undefined ? this.useWallClock : !useHighResTime;
+        if (useWall) {
+            const ms &#x3D; BigInt(Date.now());
+            return ms &amp; this.maxTimestamp;
+        }
+        if (typeof process !&#x3D;&#x3D; &#x27;undefined&#x27; &amp;&amp; typeof process.hrtime?.bigint &#x3D;&#x3D;&#x3D; &#x27;function&#x27;) {
+            const ns &#x3D; process.hrtime.bigint();
+            return ns &amp; this.maxTimestamp;
+        }
+        const ms &#x3D; BigInt(Date.now());
+        return ms &amp; this.maxTimestamp;
     }
 
     isIdExpired(id: bigint | HybridID, expiryDurationInMillis: number): boolean {
+        if (this.maskTimestamp) {
+            return false;
+        }
         if (id instanceof HybridID) {
             id &#x3D; (id as HybridID).toBigInt();
         }
 
-        const timestamp &#x3D; id &gt;&gt; BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits);
-        const currentTimestamp &#x3D; BigInt(process.hrtime.bigint());
-        return (currentTimestamp - timestamp) &gt; BigInt(expiryDurationInMillis * 1_000_000);
+        const totalBits &#x3D; this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
+        const timestamp &#x3D; id &gt;&gt; BigInt(totalBits);
+        if (this.useWallClock) {
+            const currentMs &#x3D; BigInt(Date.now());
+            const creationMs &#x3D; timestamp &amp; this.maxTimestamp;
+            return (currentMs - creationMs) &gt; BigInt(expiryDurationInMillis);
+        }
+        if (typeof process !&#x3D;&#x3D; &#x27;undefined&#x27; &amp;&amp; typeof process.hrtime?.bigint &#x3D;&#x3D;&#x3D; &#x27;function&#x27;) {
+            const currentNs &#x3D; process.hrtime.bigint();
+            return (currentNs - timestamp) &gt; BigInt(expiryDurationInMillis * 1_000_000);
+        }
+        const currentMs &#x3D; BigInt(Date.now());
+        const creationMs &#x3D; timestamp &amp; this.maxTimestamp;
+        return (currentMs - creationMs) &gt; BigInt(expiryDurationInMillis);
     }
 
     toBase62(id: bigint | HybridID): string {
@@ -1918,7 +2075,8 @@ export class HybridIDGenerator extends EventEmitter {
         const totalBits &#x3D; this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
 
         const timestamp &#x3D; id &gt;&gt; BigInt(totalBits);
-        if (timestamp &lt; 0) return false;  // Timestamp must be non-negative
+        if (timestamp &lt; BigInt(0)) return false;  // Timestamp must be non-negative
+        if (timestamp &gt; this.maxTimestamp) return false;  // Timestamp must be within configured bit range
 
         const machineIdShift &#x3D; this.sequenceBits + this.randomBits + this.entropyBits;
         const machineId &#x3D; Number((id &gt;&gt; BigInt(machineIdShift)) &amp; BigInt((1 &lt;&lt; this.machineIdBits) - 1));

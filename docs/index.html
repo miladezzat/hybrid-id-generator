@@ -85,6 +85,63 @@
 <h1>Hybrid ID Generator</h1>
 <p><img src="https://img.shields.io/npm/v/hybrid-id-generator" alt="npm" class="img-responsive"> <img src="https://img.shields.io/npm/l/hybrid-id-generator" alt="npm" class="img-responsive">
 <img src="https://img.shields.io/npm/dw/hybrid-id-generator" alt="npm" class="img-responsive"><img src="https://img.shields.io/github/stars/miladezzat/hybrid-id-generator" alt="GitHub stars" class="img-responsive"></p>
+<h2>Comparison: UUIDv4 vs UUIDv7 vs Hybrid ID</h2>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th>Criterion</th>
+<th>UUIDv4</th>
+<th>UUIDv7 (RFC 9562)</th>
+<th>Hybrid ID (this library)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chronological order</strong></td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes (wall-clock, configurable)</td>
+</tr>
+<tr>
+<td><strong>Size</strong></td>
+<td>128 bits</td>
+<td>128 bits</td>
+<td><strong>87 bits</strong> (smaller)</td>
+</tr>
+<tr>
+<td><strong>Standard / ecosystem</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No (custom format)</td>
+</tr>
+<tr>
+<td><strong>Explicit shard ID</strong></td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong> (machine/shard field)</td>
+</tr>
+<tr>
+<td><strong>Expiry check</strong></td>
+<td>No</td>
+<td>No</td>
+<td>Yes (if not masked)</td>
+</tr>
+<tr>
+<td><strong>Decode / info</strong></td>
+<td>No</td>
+<td>No</td>
+<td>Yes (timestamp, machineId, etc.)</td>
+</tr>
+<tr>
+<td><strong>Index-friendly</strong></td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes (numeric, time-ordered)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to use which:</strong> Use <strong>UUIDv7</strong> when you want a standard, time-sortable ID with broad tooling support. Use <strong>Hybrid ID</strong> when you need smaller size (87 vs 128 bits), an explicit machine/shard ID for routing, or built-in decode/expiry/masking.</p>
+<hr>
 <p>The <strong>Hybrid ID Generator</strong> is a powerful TypeScript-based library designed to produce unique identifiers by seamlessly combining timestamps, machine identifiers, sequence numbers, and random bits. This innovative approach ensures that each generated ID is unique and highly resilient against collisions, making it ideal for distributed systems.</p>
 <p>This package is optimized for versatility and can be effortlessly utilized in both client-side and server-side environments, offering flexibility for a wide range of applications—from web development to microservices architecture.</p>
 <p>Whether you are building a high-performance application that requires unique identifiers for database entries or need to track events in real-time, the Hybrid ID Generator provides a reliable solution that meets your needs.</p>
@@ -97,7 +154,14 @@
 <li><strong>Timestamp Obfuscation</strong>: Offers timestamp obfuscation to enhance security and prevent reverse engineering of ID generation.</li>
 <li><strong>ID Validation</strong>: Includes methods to validate the format and structure of generated IDs.</li>
 <li><strong>Configuration Options</strong>: Allows customization of parameters such as machine identifiers, sequence numbers, and random bit lengths for flexible use cases.</li>
-<li><strong>Cross-Platform Support</strong>: Designed to work seamlessly in both client-side and server-side environments, making it versatile for various applications.</li>
+<li><strong>Cross-Platform Support</strong>: Designed to work in both Node.js and browser environments where <code>crypto.getRandomValues</code> is available.</li>
+</ul>
+<h3>Environment support</h3>
+<ul>
+<li><strong>Node.js</strong>: Full support (all options, including <code>maskTimestamp</code>, <code>machineIdStrategy: &#39;env&#39;</code> and <code>&#39;network&#39;</code>).</li>
+<li><strong>Browser</strong>: ID generation works when <code>crypto.getRandomValues</code> is available. <code>maskTimestamp</code> (timestamp obfuscation) and <code>machineIdStrategy: &#39;env&#39; | &#39;network&#39;</code> require Node.js (they use the <code>crypto</code> and <code>os</code> modules).</li>
+<li><strong>Timestamp</strong>: By default uses wall-clock time (<code>Date.now()</code>, ms since Unix epoch) for chronological ordering and expiry; set <code>useWallClock: false</code> to use monotonic time (Node-only).</li>
+<li><strong>Expiry</strong>: <code>isIdExpired(id, duration)</code> returns <code>false</code> when <code>maskTimestamp</code> is true, because the timestamp cannot be read from the ID.</li>
 </ul>
 <h2>Installation</h2>
 <p>You can install the package via npm:</p>
@@ -215,6 +279,18 @@ console.log(`Generated ID: ${newId.toString()}`);</code></pre></div><h2>API</h2>
 <td>string`</td>
 <td>-</td>
 </tr>
+<tr>
+<td><code>timestampBits</code></td>
+<td><code>number</code></td>
+<td><code>42</code></td>
+<td>The number of bits for the timestamp (ms since Unix epoch, ~139 years).</td>
+</tr>
+<tr>
+<td><code>useWallClock</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Use wall-clock time (<code>Date.now()</code>) for chronological order and expiry; <code>false</code> = monotonic (Node-only).</td>
+</tr>
 </tbody>
 </table>
 <h3>HybridIDInfo</h3>
@@ -260,7 +336,7 @@ console.log(`Generated ID: ${newId.toString()}`);</code></pre></div><h2>API</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-typescript">constructor(options: HybridIDGeneratorOptions = {})</code></pre></div><p>Initializes a new instance of <code>HybridIDGenerator</code> with the specified options.</p>
 <h3>Properties</h3>
 <ul>
-<li><strong>options</strong>: HybridIDGeneratorOptions &amp; { sequence: number; lastTimestamp: bigint; maxSequence: number; maxMachineId: number; }<ul>
+<li><strong>options</strong>: HybridIDGeneratorOptions &amp; { sequence: number; lastTimestamp: bigint; maxSequence: number; maxMachineId: number; timestampBits: number; useWallClock: boolean; maxTimestamp: bigint; }<ul>
 <li>Gets the current options and state of the Hybrid ID generator.</li>
 </ul>
 </li>
@@ -273,7 +349,14 @@ console.log(`Generated ID: ${newId.toString()}`);</code></pre></div><h2>API</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-js">idGenerator.on(&#39;idGenerated&#39;, (id) =&gt; {
     console.log(`New ID generated: ${id}`);
 });
-idGenerator.nextId();</code></pre></div><h2>Contributing</h2>
+idGenerator.nextId();</code></pre></div><h2>Releasing</h2>
+<p>Release is <strong>prepared locally</strong>; <strong>publishing to npm is done by GitHub Actions</strong> when you push a version tag.</p>
+<ol>
+<li><strong>Prepare</strong> (bump version, update CHANGELOG, create tag; no publish):<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm run prepare-release</code></pre></div></li>
+<li><strong>Push</strong> the new commit and tag to trigger the publish workflow:<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git push --follow-tags</code></pre></div></li>
+<li>The <a href=".github/workflows/publish.yml">Publish Package</a> workflow runs on the tag, runs build + tests, then publishes to npm. Ensure the repo secret <code>NPM_TOKEN</code> is set.</li>
+</ol>
+<h2>Contributing</h2>
 <p>Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or feature requests.</p>
 
 

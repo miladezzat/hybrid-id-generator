@@ -2,7 +2,7 @@
 
 import { EventEmitter } from 'events';
 import { generateRandomBits, obfuscateTimestamp, encodeBase62, decodeBase62, validateMachineId } from './utils';
-import { MachineIDStrategy } from "./MachineIDProvider";
+import { MachineIDStrategy, MachineIDProviderFactory } from "./MachineIDProvider";
 import { HybridID } from './HybridID';
 
 
@@ -16,6 +16,10 @@ export interface HybridIDGeneratorOptions {
     machineIdBits?: number;
     machineId?: number | string;
     machineIdStrategy?: 'env' | 'network' | 'random'; // this is the machine id provider strategy
+    /** Number of bits for timestamp (default 42 = ms since Unix epoch, ~139 years). */
+    timestampBits?: number;
+    /** If true, use wall-clock time (Date.now()) for chronological order and expiry; if false, use process.hrtime.bigint() (monotonic, process-specific). Default true. */
+    useWallClock?: boolean;
 }
 
 export interface HybridIDInfo {
@@ -123,6 +127,24 @@ export class HybridIDGenerator extends EventEmitter {
      */
     private machineIdStrategy: MachineIDStrategy;
 
+    /**
+     * The number of bits allocated for the timestamp component (default 42 = ms since Unix epoch).
+     * @private
+     */
+    private timestampBits: number;
+
+    /**
+     * If true, use wall-clock time (Date.now()) for chronological order and expiry.
+     * @private
+     */
+    private useWallClock: boolean;
+
+    /**
+     * Maximum timestamp value (2^timestampBits - 1) for capping.
+     * @private
+     */
+    private maxTimestamp: bigint;
+
 
     /**
      * Constructs a new Hybrid ID generator with the specified options.
@@ -141,6 +163,8 @@ export class HybridIDGenerator extends EventEmitter {
      * @param {number} [options.machineIdBits=12] - The number of bits for the machine ID component (default: 12).
      * @param {MachineIDStrategy} [options.machineIdStrategy] - The strategy used for generating the machine ID.
      * @param {number} [options.machineId] - The initial machine ID to use (must be validated).
+     * @param {number} [options.timestampBits=42] - The number of bits for the timestamp (default: 42, ms since Unix epoch).
+     * @param {boolean} [options.useWallClock=true] - Use wall-clock time (Date.now()) for ordering and expiry (default: true).
      */
     constructor(options: HybridIDGeneratorOptions = {}) {
         super();
@@ -154,9 +178,22 @@ export class HybridIDGenerator extends EventEmitter {
         this.machineIdBits = options.machineIdBits || 12;
         this.maxMachineId = (1 << this.machineIdBits) - 1;
         this.machineIdStrategy = options.machineIdStrategy;
+        this.timestampBits = options.timestampBits ?? 42;
+        this.useWallClock = options.useWallClock !== false;
+        this.maxTimestamp = (BigInt(1) << BigInt(this.timestampBits)) - BigInt(1);
 
-        // Use the helper function for machine ID validation
-        this.machineId = validateMachineId(this.machineIdStrategy, options.machineId, this.maxMachineId);
+        // Resolve machine ID: use providers for env/network, validateMachineId for random or explicit numeric
+        if (this.machineIdStrategy === 'env' || this.machineIdStrategy === 'network') {
+            const value = this.machineIdStrategy === 'env' ? options.machineId as string : undefined;
+            const provider = MachineIDProviderFactory.createMachineIDProvider(this.machineIdStrategy, value);
+            let resolved = provider.getMachineId();
+            if (resolved < 0 || resolved > this.maxMachineId) {
+                resolved = ((resolved % (this.maxMachineId + 1)) + (this.maxMachineId + 1)) % (this.maxMachineId + 1);
+            }
+            this.machineId = resolved;
+        } else {
+            this.machineId = validateMachineId(this.machineIdStrategy, options.machineId, this.maxMachineId);
+        }
 
         this.maxSequence = (1 << this.sequenceBits) - 1;
     }
@@ -183,6 +220,9 @@ export class HybridIDGenerator extends EventEmitter {
         lastTimestamp: bigint;
         maxSequence: number;
         maxMachineId: number;
+        timestampBits: number;
+        useWallClock: boolean;
+        maxTimestamp: bigint;
     } {
         return {
             sequenceBits: this.sequenceBits,
@@ -194,6 +234,9 @@ export class HybridIDGenerator extends EventEmitter {
             machineIdBits: this.machineIdBits,
             machineId: this.machineId,
             machineIdStrategy: this.machineIdStrategy as HybridIDGeneratorOptions['machineIdStrategy'],
+            timestampBits: this.timestampBits,
+            useWallClock: this.useWallClock,
+            maxTimestamp: this.maxTimestamp,
             sequence: this.sequence,
             lastTimestamp: this.lastTimestamp,
             maxSequence: this.maxSequence,
@@ -216,7 +259,7 @@ export class HybridIDGenerator extends EventEmitter {
     nextId(): HybridID {
         let timestamp = this.getTimestamp();
         if (this.maskTimestamp) {
-            timestamp = obfuscateTimestamp(timestamp);
+            timestamp = obfuscateTimestamp(timestamp) & this.maxTimestamp;
         }
 
         if (timestamp === this.lastTimestamp) {
@@ -232,8 +275,10 @@ export class HybridIDGenerator extends EventEmitter {
 
         this.lastTimestamp = timestamp;
         const randomBits = generateRandomBits(this.randomBits, this.useCrypto);
+        const entropyValue = generateRandomBits(this.entropyBits, this.useCrypto);
         const hybridId = (timestamp << BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
             (BigInt(this.machineId) << BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+            (BigInt(entropyValue) << BigInt(this.sequenceBits + this.randomBits)) |
             (BigInt(randomBits) << BigInt(this.sequenceBits)) |
             BigInt(this.sequence);
 
@@ -268,7 +313,7 @@ export class HybridIDGenerator extends EventEmitter {
 
         let timestamp = this.getTimestamp();
         if (this.maskTimestamp) {
-            timestamp = obfuscateTimestamp(timestamp);
+            timestamp = obfuscateTimestamp(timestamp) & this.maxTimestamp;
         }
 
         // Cache the last generated timestamp
@@ -293,9 +338,11 @@ export class HybridIDGenerator extends EventEmitter {
             this.lastTimestamp = lastTimestamp; // Update the class property
 
             const randomBits = generateRandomBits(this.randomBits, this.useCrypto);
+            const entropyValue = generateRandomBits(this.entropyBits, this.useCrypto);
 
             const hybridId = (timestamp << BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits)) |
                 (BigInt(this.machineId) << BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) |
+                (BigInt(entropyValue) << BigInt(this.sequenceBits + this.randomBits)) |
                 (BigInt(randomBits) << BigInt(this.sequenceBits)) |
                 BigInt(this.sequence);
 
@@ -313,36 +360,49 @@ export class HybridIDGenerator extends EventEmitter {
 
 
     /**
-     * Retrieves the current timestamp in nanoseconds. 
-     * This method provides flexibility to choose between high-resolution timing and wall-clock time.
-     * 
-     * - `process.hrtime.bigint()` provides high precision but may not be consistent across runs.
-     * - `Date.now()` gives a wall-clock time in milliseconds, which is more consistent across runs.
+     * Retrieves the current timestamp, capped to timestampBits.
+     * Default: wall-clock time (Date.now() in ms) for real-world chronological order and expiry.
+     * Optional: process.hrtime.bigint() (monotonic, process-specific) when useWallClock is false.
      *
-     * You can choose which source of time to use based on your application's requirements.
-     * 
-     * @param useHighResTime - A boolean flag indicating whether to use high-resolution time (default is true).
-     * @returns {bigint} The current timestamp in nanoseconds.
+     * @param useHighResTime - Override: if true use process.hrtime.bigint() (when available), else Date.now() ms. Default follows options.useWallClock.
+     * @returns {bigint} The current timestamp (ms if wall-clock, capped to timestampBits; else hrtime ns capped).
      */
-    getTimestamp(useHighResTime: boolean = true): bigint {
-        // Use process.hrtime.bigint() for high precision, 
-        // but also ensure we account for system time consistency.
-        const highResTime = process.hrtime.bigint();
-        const wallClockTime = BigInt(Date.now()) * BigInt(1_000_000); // Convert to nanoseconds
-
-        // This allows you to decide which source of time you want to use.
-        // You can choose to use either highResTime or wallClockTime depending on your needs.
-        return useHighResTime ? highResTime : wallClockTime;
+    getTimestamp(useHighResTime?: boolean): bigint {
+        const useWall = useHighResTime === undefined ? this.useWallClock : !useHighResTime;
+        if (useWall) {
+            const ms = BigInt(Date.now());
+            return ms & this.maxTimestamp;
+        }
+        if (typeof process !== 'undefined' && typeof process.hrtime?.bigint === 'function') {
+            const ns = process.hrtime.bigint();
+            return ns & this.maxTimestamp;
+        }
+        const ms = BigInt(Date.now());
+        return ms & this.maxTimestamp;
     }
 
     isIdExpired(id: bigint | HybridID, expiryDurationInMillis: number): boolean {
+        if (this.maskTimestamp) {
+            return false;
+        }
         if (id instanceof HybridID) {
             id = (id as HybridID).toBigInt();
         }
 
-        const timestamp = id >> BigInt(this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits);
-        const currentTimestamp = BigInt(process.hrtime.bigint());
-        return (currentTimestamp - timestamp) > BigInt(expiryDurationInMillis * 1_000_000);
+        const totalBits = this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
+        const timestamp = id >> BigInt(totalBits);
+        if (this.useWallClock) {
+            const currentMs = BigInt(Date.now());
+            const creationMs = timestamp & this.maxTimestamp;
+            return (currentMs - creationMs) > BigInt(expiryDurationInMillis);
+        }
+        if (typeof process !== 'undefined' && typeof process.hrtime?.bigint === 'function') {
+            const currentNs = process.hrtime.bigint();
+            return (currentNs - timestamp) > BigInt(expiryDurationInMillis * 1_000_000);
+        }
+        const currentMs = BigInt(Date.now());
+        const creationMs = timestamp & this.maxTimestamp;
+        return (currentMs - creationMs) > BigInt(expiryDurationInMillis);
     }
 
     toBase62(id: bigint | HybridID): string {
@@ -401,7 +461,8 @@ export class HybridIDGenerator extends EventEmitter {
         const totalBits = this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
 
         const timestamp = id >> BigInt(totalBits);
-        if (timestamp < 0) return false;  // Timestamp must be non-negative
+        if (timestamp < BigInt(0)) return false;  // Timestamp must be non-negative
+        if (timestamp > this.maxTimestamp) return false;  // Timestamp must be within configured bit range
 
         const machineIdShift = this.sequenceBits + this.randomBits + this.entropyBits;
         const machineId = Number((id >> BigInt(machineIdShift)) & BigInt((1 << this.machineIdBits) - 1));
