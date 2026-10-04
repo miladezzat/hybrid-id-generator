@@ -8,6 +8,8 @@ npx playwright install chromium
 npm run verify
 ```
 
+Before publishing a new version, the release workflow must pass this verification on both Node 22 and 24 for the same commit. A failure on either runtime prevents publishing.
+
 The checks cover source regressions, built and packed installations, CommonJS/ESM/TypeScript, browser bundles, release gates, and generated documentation.
 
 ## GitHub Pages

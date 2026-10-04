@@ -23,8 +23,25 @@ jobs:
       - name: Check registry version
         id: release
         run: node scripts/check-release.js
-  build-and-publish:
+  verify:
     needs: check-release
+    if: needs.check-release.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Validate supported runtime
+        run: npm run verify
+  build-and-publish:
+    needs: [check-release, verify]
     if: needs.check-release.outputs.publish == 'true'
     runs-on: ubuntu-latest
     permissions:
@@ -40,9 +57,6 @@ jobs:
       - name: Use an OIDC-capable npm CLI
         run: npm install --global npm@11.13.0
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - name: Validate package and documentation
-        run: npm run verify
       - name: Publish to npm
         run: npm publish --access public
       - name: Verify published version
