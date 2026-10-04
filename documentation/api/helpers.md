@@ -45,6 +45,7 @@ interface HybridIDInfo {
   timestamp: bigint;
   machineId: number;
   randomBits: number;
+  entropy: number;
   sequence: number;
   masked: boolean;
 }
