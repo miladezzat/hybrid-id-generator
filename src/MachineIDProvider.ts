@@ -1,6 +1,6 @@
 //src/MachineIDProvider.ts
 import os from 'os';
-import crypto from 'crypto';
+import { generateRandomBits } from './utils';
 
 export type MachineIDStrategy = 'env' | 'network' | 'random' | undefined;
 
@@ -34,8 +34,8 @@ export class EnvMachineIDProvider implements MachineIDProvider {
         if (!machineIdStr) {
             throw new Error(`Environment variable ${this.envVarName} is not defined`);
         }
-        const machineId = parseInt(machineIdStr, 10);
-        if (isNaN(machineId) || machineId < 0) {
+        const machineId = Number(machineIdStr);
+        if (!/^[0-9]+$/.test(machineIdStr) || !Number.isSafeInteger(machineId) || machineId < 0) {
             throw new Error(`Invalid MACHINE_ID from environment variable: ${this.envVarName}`);
         }
 
@@ -123,6 +123,9 @@ export class RandomMachineIDProvider implements MachineIDProvider {
      * @param maxMachineId Maximum value for the machine ID. Defaults to 1023.
      */
     constructor(maxMachineId: number = 1023) {
+        if (!Number.isInteger(maxMachineId) || maxMachineId < 0 || maxMachineId > 4294967295) {
+            throw new Error('Maximum machine ID must be an integer between 0 and 4294967295.');
+        }
         this.maxMachineId = maxMachineId;
     }
 
@@ -131,14 +134,13 @@ export class RandomMachineIDProvider implements MachineIDProvider {
     }
 
     private generateRandomMachineId(): number {
-        const randomValue = this.getCryptographicRandomValue(4); // Get a random 4-byte value
-        return randomValue % (this.maxMachineId + 1); // Ensure it stays within the maxMachineId range
+        const range = this.maxMachineId + 1;
+        const limit = Math.floor(2 ** 32 / range) * range;
+        let randomValue: number;
+        do { randomValue = generateRandomBits(32, true); } while (randomValue >= limit);
+        return randomValue % range;
     }
 
-    private getCryptographicRandomValue(byteSize: number): number {
-        const buffer = crypto.randomBytes(byteSize); // Generate cryptographic random bytes
-        return buffer.readUInt32BE(0); // Convert first 4 bytes to an unsigned 32-bit integer
-    }
 }
 
 /**

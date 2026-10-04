@@ -1,0 +1,13 @@
+const assert = require('node:assert/strict');
+const { HID, HybridIDGenerator, HybridID, encodeBase64, decodeBase64, RandomMachineIDProvider } = require('../dist');
+assert.equal(HID, HybridIDGenerator);
+const generator = new HID({ machineId: 1, useCrypto: true });
+const ids = generator.nextIds(10000);
+assert.equal(new Set(ids.map(id => id.toString())).size, ids.length);
+assert.equal(generator.info(ids[0]).machineId, 1);
+assert.equal(HybridID.fromBase62(ids[0].toBase62()).toBigInt(), ids[0].toBigInt());
+assert.equal(HybridID.fromBase64(ids[0].toBase64()).toBigInt(), ids[0].toBigInt());
+assert.equal(decodeBase64(encodeBase64(0n)), 0n);
+assert.equal(HybridID.deserialize(ids[0].serialize()).isEqual(ids[0]), true);
+assert.ok(new RandomMachineIDProvider(7).getMachineId() <= 7);
+console.log('Built package smoke checks passed');

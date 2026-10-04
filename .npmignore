@@ -1,7 +1,0 @@
-node_modules
-.github
-__tests__
-tsconfig.json
-tsconfig.build.json
-jest.config.js
-docs

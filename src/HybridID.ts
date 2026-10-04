@@ -1,13 +1,21 @@
 //src/HybridID.ts
 import { Base62Chars, Base32Chars, Base64Chars } from "./constants";
-import { encodeBase62, encodeBase32, encodeBase64, decodeBase62, decodeBase32, decodeBase64 } from "./utils";
+import { encodeBase62, encodeBase32, encodeBase64, decodeBase62, decodeBase32, decodeBase64, generateRandomBits } from "./utils";
 
 export class HybridID {
+    private id: bigint;
+
     /**
      * Creates an instance of HybridID.
      * @param id - The ID value as a bigint or string.
      */
-    constructor(private id: bigint | string) { }
+    constructor(id: bigint | string) {
+        if (typeof id !== 'bigint' && (typeof id !== 'string' || !/^[0-9]+$/.test(id))) {
+            throw new Error('ID must be a non-negative integer or decimal string.');
+        }
+        this.id = BigInt(id);
+        if (this.id < 0n) throw new Error('ID must be a non-negative integer.');
+    }
 
     /**
      * Converts the ID to a Base62 encoded string.
@@ -89,6 +97,7 @@ export class HybridID {
      * @returns A new HybridID instance.
      */
     static fromHex(hex: string): HybridID {
+        if (typeof hex !== 'string' || !/^[0-9a-fA-F]+$/.test(hex)) throw new Error('Invalid hexadecimal ID');
         return new HybridID(BigInt('0x' + hex));
     }
 
@@ -109,10 +118,10 @@ export class HybridID {
     }
 
     /**
-     * Returns the ID value as a bigint or string.
+     * Returns the ID value as a bigint.
      * @returns The ID value.
      */
-    valueOf(): bigint | string {
+    valueOf(): bigint {
         return this.id;
     }
 
@@ -151,7 +160,7 @@ export class HybridID {
     static isValidBase62(encoded: string): boolean {
         const escapedChars = Base62Chars.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special regex characters
         const regex = new RegExp(`^[${escapedChars}]+$`);
-        return regex.test(encoded);
+        return typeof encoded === 'string' && regex.test(encoded);
     }
     
     /**
@@ -163,7 +172,7 @@ export class HybridID {
         // Create a regex for valid Base32 characters
         const escapedChars = Base32Chars.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special regex characters
         const regex = new RegExp(`^[${escapedChars}]+$`);
-        return regex.test(encoded);
+        return typeof encoded === 'string' && regex.test(encoded);
     }
     
     /**
@@ -172,19 +181,8 @@ export class HybridID {
      * @returns True if valid, false otherwise.
      */
     static isValidBase64(encoded: string): boolean {
-        // Create a regex for valid Base64 characters
-        const escapedChars = Base64Chars.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special regex characters
-        const regex = new RegExp(`^[${escapedChars}]*={0,2}$`); // Allow 0 to 2 '=' padding at the end
-    
-        // Check for valid characters and padding
-        if (!regex.test(encoded)) {
-            return false; // Invalid character found or padding format is incorrect
-        }
-    
-        // Check if the string is in valid Base64 format without padding issues
-        const base64WithoutPadding = encoded.replace(/=+$/, ''); // Remove padding
-        return /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/.test(base64WithoutPadding);
-    }    
+        return typeof encoded === 'string' && encoded.length > 0 && [...encoded].every(character => Base64Chars.includes(character));
+    }
 
     /**
      * Serializes the HybridID instance to a JSON string.
@@ -201,7 +199,8 @@ export class HybridID {
      */
     static deserialize(serialized: string): HybridID {
         const data = JSON.parse(serialized);
-        return new HybridID(BigInt(data.id));
+        if (!data || typeof data.id !== 'string') throw new Error('Invalid serialized HybridID');
+        return new HybridID(data.id);
     }
 
     /**
@@ -209,7 +208,7 @@ export class HybridID {
      * @returns A new HybridID instance with a random ID.
      */
     static generateRandom(): HybridID {
-        const randomId = BigInt(crypto.getRandomValues(new Uint32Array(1))[0]);
+        const randomId = BigInt(generateRandomBits(32, true));
         return new HybridID(randomId);
     }
 }

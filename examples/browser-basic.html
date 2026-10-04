@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Hybrid ID browser example</title></head>
+<body><h1>Hybrid ID Generator</h1><button id="generate">Generate an ID</button><pre id="output"></pre>
+<script src="../dist/hybrid-id-generator.global.js"></script>
+<script>
+  const generator = new HybridIDGeneratorLib.HybridIDGenerator({ machineId: 1, useCrypto: true });
+  document.querySelector('#generate').addEventListener('click', () => {
+    const id = generator.nextId();
+    document.querySelector('#output').textContent = id.toBase62();
+  });
+  document.querySelector('#generate').click();
+</script></body></html>

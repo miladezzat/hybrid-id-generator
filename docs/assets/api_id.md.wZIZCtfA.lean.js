@@ -1,0 +1,1 @@
+import{_ as a,o as t,c as i,a2 as o}from"./chunks/framework.-EXvoMUp.js";const u=JSON.parse('{"title":"HybridID","description":"","frontmatter":{},"headers":[],"relativePath":"api/id.md","filePath":"api/id.md"}'),r={name:"api/id.md"};function d(n,e,s,c,l,h){return t(),i("div",null,[...e[0]||(e[0]=[o("",19)])])}const m=a(r,[["render",d]]);export{u as __pageData,m as default};

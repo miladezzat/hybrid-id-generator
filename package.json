@@ -1,50 +1,92 @@
 {
-    "name": "hybrid-id-generator",
-    "version": "3.1.2",
-    "description": "A powerful hybrid ID generator that combines timestamps, machine IDs, random bits, and sequence numbers to create globally unique identifiers. Features collision prevention, Base62 encoding, and optional ID expiry tracking, ideal for distributed systems and high-scale applications.",
-    "author": "Milad Ezzat",
-    "main": "dist/index.js",
-    "scripts": {
-        "build": "tsc",
-        "test": "jest",
-        "start": "node dist/index.js",
-        "release": "npx standard-version",
-        "prepare-release": "npm run build && npm test && npx standard-version",
-        "docs": "npx compodoc -p tsconfig.json -d docs"
+  "name": "hybrid-id-generator",
+  "version": "3.2.0",
+  "description": "Configurable bigint identifiers with timestamps, machine IDs, random fields, sequence numbers, and Base32/Base62/Base64 integer encodings.",
+  "author": "Milad Fahmy",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "jest --runInBand",
+    "test:release": "node --test tests/release.test.js",
+    "smoke": "node tests/package-smoke.js",
+    "smoke:install": "node tests/package-install-smoke.js",
+    "smoke:browser": "node tests/browser-smoke.js",
+    "docs": "node scripts/build-docs.js",
+    "docs:serve": "vitepress dev documentation --port 3102",
+    "docs:preview": "vitepress preview documentation --port 3102",
+    "smoke:docs": "node tests/docs-smoke.js",
+    "smoke:docs:browser": "node tests/docs-browser-smoke.js",
+    "verify": "npm run build && npm test && npm run test:release && npm run smoke && npm run smoke:install && npm run smoke:browser && npm run docs && npm run smoke:docs && npm run smoke:docs:browser",
+    "prepublishOnly": "npm run build && npm test && npm run smoke",
+    "release": "npm version",
+    "prepare-release": "npm run verify && npm version"
+  },
+  "license": "MIT",
+  "keywords": [
+    "id",
+    "identifier",
+    "unique id",
+    "uuid",
+    "hybrid id",
+    "generator",
+    "timestamp",
+    "random id",
+    "sequence id",
+    "collision-free",
+    "id expiry",
+    "base62",
+    "node id",
+    "machine id",
+    "unique identifier",
+    "distributed systems",
+    "uuid alternative"
+  ],
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.7.4",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.14",
+    "typescript": "^5.6.2",
+    "vitepress": "1.6.4",
+    "esbuild": "^0.28.2",
+    "events": "^3.3.0",
+    "playwright": "^1.63.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miladezzat/hybrid-id-generator"
+  },
+  "bugs": {
+    "url": "https://github.com/miladezzat/hybrid-id-generator/issues"
+  },
+  "homepage": "https://miladezzat.github.io/hybrid-id-generator/",
+  "types": "dist/index.d.ts",
+  "browser": "dist/browser.mjs",
+  "unpkg": "dist/hybrid-id-generator.global.js",
+  "jsdelivr": "dist/hybrid-id-generator.global.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/browser.d.mts",
+        "default": "./dist/browser.mjs"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
-    "license": "MIT",
-    "keywords": [
-        "id",
-        "identifier",
-        "unique id",
-        "uuid",
-        "hybrid id",
-        "generator",
-        "timestamp",
-        "random id",
-        "sequence id",
-        "collision-free",
-        "id expiry",
-        "base62",
-        "node id",
-        "machine id",
-        "unique identifier",
-        "distributed systems",
-        "uuid alternative"
-    ],
-    "devDependencies": {
-        "@types/jest": "^29.5.13",
-        "@types/node": "^22.7.4",
-        "jest": "^29.7.0",
-        "ts-jest": "^29.2.5",
-        "typescript": "^5.6.2"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/miladezzat/hybrid-id-generator"
-    },
-    "bugs": {
-        "url": "https://github.com/miladezzat/hybrid-id-generator/issues"
-    },
-    "homepage": "http://nodejs.miladfahmy.me/hybrid-id-generator"
+    "./package.json": "./package.json"
+  },
+  "overrides": {
+    "vitepress": {
+      "vite": "6.4.3"
+    }
+  }
 }
