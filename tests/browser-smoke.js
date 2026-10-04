@@ -19,7 +19,7 @@ const { serve } = require('./static-server');
       const generator = new lib.HID({ machineId: 7, useCrypto: true, enableEventEmission: true, sequenceBits: 1 });
       let events = 0;
       generator.on('idGenerated', () => { events++; });
-      const ids = generator.nextIds(10);
+      const ids = [...generator.iterateIds(10)];
       const id = ids[0];
       const throws = callback => { try { callback(); return false; } catch { return true; } };
       return {

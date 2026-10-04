@@ -19,6 +19,18 @@ const generator = new HID({ machineId: 1 });
 
 `nextIds(batchSize: number): HybridID[]` accepts a safe integer from `1` to `1_000_000`. Each item uses the same generation path as `nextId()`, including clock reads and event emission. This is synchronous allocation; use smaller batches when responsiveness matters.
 
+## iterateIds
+
+`iterateIds(count: number): IterableIterator<HybridID>` validates a positive safe integer immediately, then generates one ID per consumed item. It accepts counts larger than `nextIds()` without allocating an array. Creating or closing the iterator generates no IDs. Each item uses `nextId()`, including its current clock, sequence state, and events; interleaved iterators share the same generator.
+
+```ts
+for (const id of generator.iterateIds(10_000_000)) {
+  await saveId(id.toString());
+}
+```
+
+Iteration is synchronous. Consuming it in a tight loop still blocks the event loop; control scheduling or await application work between items when responsiveness matters.
+
 ## info
 
 `info(id: HybridID | bigint | string): HybridIDInfo` validates and decodes the ID. Strings are interpreted as Base62. Invalid IDs throw `Invalid ID`.

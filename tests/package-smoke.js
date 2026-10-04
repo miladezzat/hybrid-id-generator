@@ -14,6 +14,7 @@ assert.equal(HybridID.fromBase64(ids[0].toBase64()).toBigInt(), ids[0].toBigInt(
 assert.equal(decodeBase64(encodeBase64(0n)), 0n);
 assert.equal(HybridID.deserialize(ids[0].serialize()).isEqual(ids[0]), true);
 assert.ok(new RandomMachineIDProvider(7).getMachineId() <= 7);
+assert.equal(Array.from(generator.iterateIds(3)).length, 3);
 console.log('Built package smoke checks passed');
 require('node:child_process').execFileSync(process.execPath, [
   require.resolve('typescript/bin/tsc'), '--target', 'ES2020', '--module', 'Node16',
