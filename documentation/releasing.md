@@ -47,7 +47,7 @@ The matching workflow must be committed. No `NPM_TOKEN` is passed. GitHub-hosted
 2. Build and commit documentation for the final version.
 3. Merge or push the approved release to `main`.
 
-The workflow compares `package.json` with npm `latest` before installing dependencies. Equal versions skip publish and verify the existing release. A newer stable version runs the full checks, publishes once, then polls the exact npm version for registry propagation. Older or malformed versions fail the gate.
+The workflow compares `package.json` with npm `latest` before installing dependencies. Equal versions skip publish and verify the existing release. For a newer stable version, it checks the exact version endpoint first: an existing version is verified rather than republished, even if `latest` lags or was retagged. A missing exact version runs the full checks, publishes once, then polls for registry propagation. Older or malformed versions and registry lookup errors fail the gate.
 
 A workflow re-run for an already published version verifies it instead of publishing again. If verification times out after an accepted publish, inspect npm before retrying: registry processing is distinct from upload success.
 
