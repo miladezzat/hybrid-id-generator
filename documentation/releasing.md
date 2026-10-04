@@ -12,7 +12,7 @@ The checks cover source regressions, built and packed installations, CommonJS/ES
 
 ## GitHub Pages
 
-Pages serves the committed `docs/` directory from **development**. VitePress Markdown and theme files live in `documentation/`. This keeps the existing publishing model and replaces the generated site.
+Pages serves the committed `docs/` directory from **main**. VitePress Markdown and theme files live in `documentation/`.
 
 ```bash
 npm run docs
@@ -20,7 +20,7 @@ npm run smoke:docs
 npm run smoke:docs:browser
 ```
 
-Commit both the source changes and generated `docs/` output. After the change is merged into `development`, GitHub Pages rebuilds automatically. The site's base path is `/hybrid-id-generator/`; its address is `https://miladezzat.github.io/hybrid-id-generator/`.
+Commit both the source changes and generated `docs/` output. After the change is merged into `main`, GitHub Pages rebuilds automatically. The site's base path is `/hybrid-id-generator/`; its address is `https://miladezzat.github.io/hybrid-id-generator/`.
 
 For editing, use `npm run docs:serve`; for built-site review, use `npm run docs:preview`. Open the printed URL with the repository base path.
 
@@ -41,7 +41,7 @@ The matching workflow must be committed. No `NPM_TOKEN` is passed. GitHub-hosted
 
 ## Prepare and publish a version
 
-The stable release branch remains **main**, matching the existing release workflow. Review changes in `development`, then promote the reviewed release to `main`.
+**main** is the only permanent branch. Open pull requests against `main`; merging a reviewed change updates the documentation and runs the npm release gate. Temporary feature branches can be removed after merging.
 
 1. Update the version and changelog in the reviewed change. `npm run prepare-release -- patch` validates and uses npm's built-in version command; it creates a commit and tag, so run it only when ready for that operation.
 2. Build and commit documentation for the final version.

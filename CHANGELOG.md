@@ -1,10 +1,11 @@
 # Changelog
 
-## 3.2.0 (unreleased)
+## 3.2.0 (2026-10-04)
 
 - Add `HID` as a compatible named alias of `HybridIDGenerator`, with identical constructor and instance behavior.
 
-- Replace Compodoc with organized VitePress guides, API reference, local search, mobile navigation, and legacy link redirects; retain the development/docs GitHub Pages deployment.
+- Replace Compodoc with organized VitePress guides, API reference, local search, mobile navigation, and legacy link redirects.
+- Use `main` as the only permanent branch for pull requests, CI, GitHub Pages, and npm releases.
 - Fix Base32/Base64 zero encoding, Base64 round trips, invalid encoding input, numeric string comparison, serialization validation, and HybridID wrapper validation.
 - Honor zero-bit fields, support 32-bit fields without signed overflow, and validate options, batches, machine IDs, and expiry durations.
 - Eliminate clock and masked sequence-overflow busy-waits; retain logical time during rollback and read the clock for every batch ID.

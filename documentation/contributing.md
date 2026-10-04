@@ -20,6 +20,6 @@ Edit `documentation/`, then run `npm run docs` and commit the generated `docs/` 
 
 ## Pull requests
 
-Target `development` for normal changes. `main` is the stable npm release branch. Explain the problem, resulting behavior, and validation. Review the [release guide](./releasing.md) for publishing and Pages deployment.
+Target `main` for all changes. It is the only permanent branch and serves documentation and stable npm releases. Explain the problem, resulting behavior, and validation. Remove temporary feature branches after merging. Review the [release guide](./releasing.md) for publishing and Pages deployment.
 
-Follow the repository's [Code of Conduct](https://github.com/miladezzat/hybrid-id-generator/blob/development/CODE_OF_CONDUCT.md).
+Follow the repository's [Code of Conduct](https://github.com/miladezzat/hybrid-id-generator/blob/main/CODE_OF_CONDUCT.md).
