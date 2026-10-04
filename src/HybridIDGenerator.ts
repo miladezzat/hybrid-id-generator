@@ -67,6 +67,7 @@ export class HybridIDGenerator extends EventEmitter {
     private timestampBits: number;
     private useWallClock: boolean;
     private maxTimestamp: bigint;
+    private maxEncodedLength: number;
 
     constructor(options: HybridIDGeneratorOptions = {}) {
         super();
@@ -85,6 +86,8 @@ export class HybridIDGenerator extends EventEmitter {
         this.maxMachineId = 2 ** this.machineIdBits - 1;
         this.maxSequence = 2 ** this.sequenceBits - 1;
         this.maxTimestamp = (1n << BigInt(this.timestampBits)) - 1n;
+        const layoutBits = this.timestampBits + this.machineIdBits + this.entropyBits + this.randomBits + this.sequenceBits;
+        this.maxEncodedLength = encodeBase62((1n << BigInt(layoutBits)) - 1n).length;
         this.machineIdStrategy = options.machineIdStrategy;
 
         if (this.machineIdStrategy === 'env' || this.machineIdStrategy === 'network') {
@@ -203,15 +206,25 @@ export class HybridIDGenerator extends EventEmitter {
         return encodedId instanceof HybridID ? encodedId.toBigInt() : decodeBase62(encodedId);
     }
 
-    /** Validate the configured bit range. This checks structure, not authenticity. */
-    isHybridID(id: string | bigint | HybridID): boolean {
+    private decodeInput(id: string | bigint | HybridID): bigint | null {
         if (id instanceof HybridID) id = id.toBigInt();
         if (typeof id === 'string') {
-            try { id = decodeBase62(id); } catch { return false; }
+            if (id.length === 0) return null;
+            // Leading zeroes do not change the integer. Only layout-sized values
+            // reach the general-purpose decoder, avoiding growing bigint work.
+            const significant = id.replace(/^0+/, '');
+            if (significant.length > this.maxEncodedLength) return null;
+            try { return decodeBase62(significant || '0'); } catch { return null; }
         }
-        if (typeof id !== 'bigint' || id < 0n) return false;
+        return typeof id === 'bigint' ? id : null;
+    }
+
+    /** Validate the configured bit range. This checks structure, not authenticity. */
+    isHybridID(id: string | bigint | HybridID): boolean {
+        const value = this.decodeInput(id);
+        if (value === null || value < 0n) return false;
         const totalBits = this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
-        return (id >> BigInt(totalBits)) <= this.maxTimestamp;
+        return (value >> BigInt(totalBits)) <= this.maxTimestamp;
     }
 
     validateID(id: bigint | string | HybridID): { valid: boolean; reason?: string } {
@@ -220,8 +233,8 @@ export class HybridIDGenerator extends EventEmitter {
 
     /** Decode with the same layout and masking configuration used to generate the ID. */
     info(id: HybridID | bigint | string): HybridIDInfo {
-        if (!this.isHybridID(id)) throw new Error('Invalid ID');
-        const value = id instanceof HybridID ? id.toBigInt() : typeof id === 'string' ? decodeBase62(id) : id;
+        const value = this.decodeInput(id);
+        if (value === null || !this.isHybridID(value)) throw new Error('Invalid ID');
         const totalBits = this.sequenceBits + this.randomBits + this.entropyBits + this.machineIdBits;
         return {
             timestamp: this.maskTimestamp ? -1n : value >> BigInt(totalBits),
