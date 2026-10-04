@@ -9,7 +9,7 @@
 - Honor zero-bit fields, support 32-bit fields without signed overflow, and validate options, batches, machine IDs, and expiry durations.
 - Eliminate clock and masked sequence-overflow busy-waits; retain logical time during rollback and read the clock for every batch ID.
 - Use milliseconds consistently for monotonic generation and expiry; reject timestamp overflow instead of truncating it.
-- Add bundled browser ES module/global entries, TypeScript package metadata, and installed-package/browser checks.
+- Add native Node ES module and bundled browser ES module/global entries, TypeScript package metadata, and installed-package/browser checks.
 - Upgrade development dependencies and use npm trusted publishing with a version gate and registry propagation verification.
 
 See the migration guide for stricter validation, zero encodings, monotonic ID compatibility, and logical clock behavior.

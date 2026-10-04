@@ -10,7 +10,7 @@ const generator = new HID({ machineId: 1 });
 console.log(generator.nextId().toBase62());
 ```
 
-Node also supports named ES imports. Environment/network machine strategies, timestamp masking, and monotonic clocks use Node APIs.
+Node also supports named ES imports through a native ES module entry, with matching TypeScript declarations. Environment/network machine strategies, timestamp masking, and monotonic clocks use Node APIs.
 
 ## Browser bundlers
 
