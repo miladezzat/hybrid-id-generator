@@ -37,10 +37,10 @@ Iteration is synchronous. Consuming it in a tight loop still blocks the event lo
 
 ```ts
 const id = generator.nextId();
-const { timestamp, machineId, randomBits, sequence, masked } = generator.info(id);
+const { timestamp, machineId, randomBits, entropy, sequence, masked } = generator.info(id);
 ```
 
-Timestamp is a bigint in milliseconds; it is `-1n` when masking is enabled. The format does not carry masking metadata: the result reflects this generator's configuration. The separate entropy field is stored in the ID but is not exposed by `HybridIDInfo`.
+Timestamp is a bigint in milliseconds; it is `-1n` when masking is enabled. The format does not carry masking metadata: the result reflects this generator's configuration. `entropy` is the decoded value of the separate entropy field, from `0` through `2 ** entropyBits - 1`; a zero-width field returns `0`. The existing `randomBits` property is the decoded random value.
 
 ## isHybridID
 

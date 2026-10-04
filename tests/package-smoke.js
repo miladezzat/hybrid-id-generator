@@ -9,6 +9,7 @@ assert.equal(eventGenerator.nextId(), emitted);
 const ids = generator.nextIds(10000);
 assert.equal(new Set(ids.map(id => id.toString())).size, ids.length);
 assert.equal(generator.info(ids[0]).machineId, 1);
+assert.ok(Number.isInteger(generator.info(ids[0]).entropy));
 assert.equal(HybridID.fromBase62(ids[0].toBase62()).toBigInt(), ids[0].toBigInt());
 assert.equal(HybridID.fromBase64(ids[0].toBase64()).toBigInt(), ids[0].toBigInt());
 assert.equal(decodeBase64(encodeBase64(0n)), 0n);

@@ -25,6 +25,7 @@ const { serve } = require('./static-server');
       return {
         events, unique: new Set(ids.map(id => id.toString())).size,
         machine: generator.info(id).machineId,
+        entropy: Number.isInteger(generator.info(id).entropy),
         base32: lib.HybridID.fromBase32(id.toBase32()).isEqual(id),
         base64: lib.HybridID.fromBase64(id.toBase64()).isEqual(id),
         zero: lib.HybridID.fromBase64(new lib.HybridID(0n).toBase64()).toString(),
@@ -34,7 +35,7 @@ const { serve } = require('./static-server');
         monotonic: throws(() => new lib.HybridIDGenerator({ useWallClock: false }).nextId()),
       };
     });
-    assert.deepEqual(results, { events: 10, unique: 10, machine: 7, base32: true, base64: true, zero: '0', random: true, env: true, mask: true, monotonic: true });
+    assert.deepEqual(results, { events: 10, unique: 10, machine: 7, entropy: true, base32: true, base64: true, zero: '0', random: true, env: true, mask: true, monotonic: true });
     assert.deepEqual(errors, []);
     console.log('Chromium ES module/global bundle, events, encoding, and runtime guards passed');
   } finally {

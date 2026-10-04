@@ -23,6 +23,7 @@ export interface HybridIDInfo {
     timestamp: bigint;
     machineId: number;
     randomBits: number;
+    entropy: number;
     sequence: number;
     masked: boolean;
 }
@@ -226,6 +227,7 @@ export class HybridIDGenerator extends EventEmitter {
             timestamp: this.maskTimestamp ? -1n : value >> BigInt(totalBits),
             machineId: Number((value >> BigInt(this.sequenceBits + this.randomBits + this.entropyBits)) & BigInt(this.maxMachineId)),
             randomBits: Number((value >> BigInt(this.sequenceBits)) & ((1n << BigInt(this.randomBits)) - 1n)),
+            entropy: Number((value >> BigInt(this.sequenceBits + this.randomBits)) & ((1n << BigInt(this.entropyBits)) - 1n)),
             sequence: Number(value & BigInt(this.maxSequence)),
             masked: this.maskTimestamp,
         };
