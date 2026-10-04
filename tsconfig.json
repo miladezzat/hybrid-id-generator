@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "target": "ES2018",                    // Set the target ECMAScript version
+      "target": "ES2020",                    // Set the target ECMAScript version
       "module": "commonjs",                  // Specify module code generation
       "declaration": true,                   // Generate declaration files
       "outDir": "./dist",                    // Redirect output structure to the 'dist' folder

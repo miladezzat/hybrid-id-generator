@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.2.0 (unreleased)
+
+- Add `HID` as a compatible named alias of `HybridIDGenerator`, with identical constructor and instance behavior.
+
+- Replace Compodoc with organized VitePress guides, API reference, local search, mobile navigation, and legacy link redirects; retain the development/docs GitHub Pages deployment.
+- Fix Base32/Base64 zero encoding, Base64 round trips, invalid encoding input, numeric string comparison, serialization validation, and HybridID wrapper validation.
+- Honor zero-bit fields, support 32-bit fields without signed overflow, and validate options, batches, machine IDs, and expiry durations.
+- Eliminate clock and masked sequence-overflow busy-waits; retain logical time during rollback and read the clock for every batch ID.
+- Use milliseconds consistently for monotonic generation and expiry; reject timestamp overflow instead of truncating it.
+- Add bundled browser ES module/global entries, TypeScript package metadata, and installed-package/browser checks.
+- Upgrade development dependencies and use npm trusted publishing with a version gate and registry propagation verification.
+
+See the migration guide for stricter validation, zero encodings, monotonic ID compatibility, and logical clock behavior.
+
+
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ### [3.1.2](https://github.com/miladezzat/hybrid-id-generator/compare/v3.1.1...v3.1.2) (2026-01-31)
