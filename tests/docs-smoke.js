@@ -7,6 +7,11 @@ const pages = ['index', 'getting-started', 'configuration', 'uniqueness', 'encod
 for (const page of pages) {
   const html = fs.readFileSync(path.join(root, `${page}.html`), 'utf8');
   assert.ok(html.includes('VitePress'), `Missing VitePress markup: ${page}`);
+  const editLinks = [...html.matchAll(/href="(https:\/\/github\.com\/miladezzat\/hybrid-id-generator\/edit\/[^\"]+)"/g)];
+  for (const [, link] of editLinks) {
+    assert.equal(link, `https://github.com/miladezzat/hybrid-id-generator/edit/main/documentation/${page}.md`, `${page}: invalid edit link`);
+  }
+  if (page !== 'index') assert.ok(editLinks.length > 0, `${page}: missing edit link`);
   for (const match of html.matchAll(/(?:href|src)="([^"#?]+)(?:[?#][^"]*)?"/g)) {
     const target = match[1];
     if (/^(https?:|data:|mailto:)/.test(target)) continue;

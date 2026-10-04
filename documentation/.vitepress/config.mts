@@ -50,7 +50,7 @@ export default defineConfig({
     search: { provider: 'local' },
     outline: [2, 3],
     socialLinks: [{ icon: 'github', link: 'https://github.com/miladezzat/hybrid-id-generator' }],
-    editLink: { pattern: 'https://github.com/miladezzat/hybrid-id-generator/edit/development/documentation/:path', text: 'Improve this page' },
+    editLink: { pattern: 'https://github.com/miladezzat/hybrid-id-generator/edit/main/documentation/:path', text: 'Improve this page' },
     footer: { message: 'Released under the MIT License.', copyright: 'Milad Fahmy' },
   },
 });
