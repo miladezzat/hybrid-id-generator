@@ -27,6 +27,20 @@ export interface HybridIDInfo {
     masked: boolean;
 }
 
+/** Listener overloads retain general EventEmitter events and infer generated IDs. */
+export interface HybridIDGenerator {
+    on(eventName: 'idGenerated', listener: (id: HybridID) => void): this;
+    on(eventName: string | symbol, listener: (...args: any[]) => void): this;
+    once(eventName: 'idGenerated', listener: (id: HybridID) => void): this;
+    once(eventName: string | symbol, listener: (...args: any[]) => void): this;
+    addListener(eventName: 'idGenerated', listener: (id: HybridID) => void): this;
+    addListener(eventName: string | symbol, listener: (...args: any[]) => void): this;
+    prependListener(eventName: 'idGenerated', listener: (id: HybridID) => void): this;
+    prependListener(eventName: string | symbol, listener: (...args: any[]) => void): this;
+    prependOnceListener(eventName: 'idGenerated', listener: (id: HybridID) => void): this;
+    prependOnceListener(eventName: string | symbol, listener: (...args: any[]) => void): this;
+}
+
 function bitWidth(name: string, value: number, minimum = 0, maximum = 32): number {
     if (!Number.isInteger(value) || value < minimum || value > maximum) {
         throw new Error(`${name} must be an integer between ${minimum} and ${maximum}.`);

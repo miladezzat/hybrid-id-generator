@@ -62,4 +62,10 @@ The read-only getter returns a new object with all resolved options plus `sequen
 
 ## idGenerated
 
-The generator extends EventEmitter. With `enableEventEmission: true`, `on('idGenerated', listener)` receives the same `HybridID` returned by `nextId()`. Standard EventEmitter listener behavior applies in Node and the browser bundle.
+The generator extends EventEmitter. With `enableEventEmission: true`, `on('idGenerated', listener)` receives the same `HybridID` returned by `nextId()`. TypeScript infers the listener argument as `HybridID` for `on`, `once`, `addListener`, `prependListener`, and `prependOnceListener`. Other string and symbol events retain standard EventEmitter behavior in Node and the browser bundle.
+
+```ts
+generator.on('idGenerated', id => {
+  console.log(id.toBase62()); // id is inferred as HybridID
+});
+```
