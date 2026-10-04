@@ -143,6 +143,17 @@ export class HybridIDGenerator extends EventEmitter {
         return Array.from({ length: batchSize }, () => this.nextId());
     }
 
+    /** Produce a finite sequence lazily, without allocating the full batch. */
+    iterateIds(count: number): IterableIterator<HybridID> {
+        if (!Number.isSafeInteger(count) || count <= 0) {
+            throw new Error('Count must be a positive safe integer.');
+        }
+        const generator = this;
+        return (function* () {
+            for (let index = 0; index < count; index += 1) yield generator.nextId();
+        })();
+    }
+
     /** Read milliseconds from the selected clock; timestamps never silently wrap. */
     getTimestamp(useHighResTime?: boolean): bigint {
         const useWall = useHighResTime === undefined ? this.useWallClock : !useHighResTime;
