@@ -23,15 +23,40 @@ const redirects = {
   'properties.html': 'api/generator.html#options',
   'coverage.html': 'contributing.html',
 };
+const legacyAnchors = {
+  'classes/HybridID.html': {
+    tobigint: 'conversions', tostring: 'conversions', valueof: 'conversions',
+    tohex: 'conversions', tobase62: 'conversions', tobase32: 'conversions', tobase64: 'conversions',
+    frombase62: 'factories', frombase32: 'factories', frombase64: 'factories', fromhex: 'factories',
+    isequal: 'comparison', islessthan: 'comparison', isgreaterthan: 'comparison',
+    isvalidbase62: 'validation', isvalidbase32: 'validation', isvalidbase64: 'validation',
+  },
+  'classes/HybridIDGenerator.html': {
+    machineid: 'options', sequence: 'options', lasttimestamp: 'options',
+    maxsequence: 'options', maxmachineid: 'options', timestampbits: 'options',
+  },
+  'miscellaneous/functions.html': {
+    encodebase62: 'integer-encoding-helpers', decodebase62: 'integer-encoding-helpers',
+    encodebase32: 'integer-encoding-helpers', decodebase32: 'integer-encoding-helpers',
+    encodebase64: 'integer-encoding-helpers', decodebase64: 'integer-encoding-helpers',
+  },
+  'miscellaneous/typealiases.html': { machineidstrategy: 'machineidstrategy-and-machineidprovider' },
+};
 const staged = fs.mkdtempSync(path.join(os.tmpdir(), 'hybrid-id-docs-'));
 try {
   const cli = path.join(path.dirname(require.resolve('vitepress/package.json')), 'bin/vitepress.js');
   execFileSync(process.execPath, [cli, 'build', 'documentation', '--outDir', staged], { cwd: root, stdio: 'inherit' });
   for (const [oldPath, target] of Object.entries(redirects)) {
     const destination = base + target;
+    const targetHtml = fs.readFileSync(path.join(staged, target.split('#')[0]), 'utf8');
+    const headings = [...targetHtml.matchAll(/<h[1-6]\b[^>]*\bid="([^"]+)"/g)].map(match => match[1]);
+    const aliases = legacyAnchors[oldPath] || {};
+    for (const section of [...Object.values(aliases), ...(target.includes('#') ? [target.split('#')[1]] : [])]) {
+      if (!headings.includes(section)) throw new Error(`Missing redirect section ${target}: ${section}`);
+    }
     const file = path.join(staged, oldPath);
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    const script = `const target=${JSON.stringify(destination)};location.replace(location.hash?target.split('#')[0]+location.hash.toLowerCase():target);`;
+    const script = `const target=${JSON.stringify(destination)};const headings=${JSON.stringify(headings)};const aliases=${JSON.stringify(aliases)};let fragment='';try{fragment=decodeURIComponent(location.hash.slice(1)).toLowerCase()}catch{}const anchor=Object.prototype.hasOwnProperty.call(aliases,fragment)?aliases[fragment]:headings.includes(fragment)?fragment:'';location.replace(anchor?target.split('#')[0]+'#'+anchor:target);`;
     fs.writeFileSync(file, `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Documentation moved</title><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=${destination}"><link rel="canonical" href="https://miladezzat.github.io${destination}"></head><body><p>This documentation has moved. <a href="${destination}">Continue to the new page</a>.</p><script>${script}</script></body></html>\n`);
   }
   function normalizeHtml(directory) {
