@@ -1,7 +1,6 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const vm = require('node:vm');
 const root = path.resolve(__dirname, '../docs');
 const base = '/hybrid-id-generator/';
 const pages = ['index', 'getting-started', 'configuration', 'uniqueness', 'encoding', 'compatibility', 'examples', 'migration', 'releasing', 'contributing', 'changelog', 'license', 'api/generator', 'api/id', 'api/providers', 'api/helpers'];
@@ -42,7 +41,7 @@ for (const [legacy, fragment, expected] of [
 ]) {
   const script = fs.readFileSync(path.join(root, legacy), 'utf8').match(/<script>(.*?)<\/script>/s)[1];
   let destination;
-  vm.runInNewContext(script, { location: { hash: fragment, replace: value => { destination = value; } } });
+  require('node:vm').runInNewContext(script, { location: { hash: fragment, replace: value => { destination = value; } } });
   assert.equal(destination, base + expected, `${legacy}${fragment}: incorrect redirect`);
   const [page, section] = expected.split('#');
   if (section) assert.ok(fs.readFileSync(path.join(root, page), 'utf8').includes(`id="${section}"`), `Missing destination anchor ${expected}`);
