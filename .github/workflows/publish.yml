@@ -1,55 +1,60 @@
-# Publish to npm when a version tag is pushed.
-# After prepare-release: use "git push --follow-tags" so the tag is pushed and this runs.
+# npm trusted publisher: miladezzat/hybrid-id-generator, publish.yml, no environment.
 name: Publish Package
-
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*'
+    branches: [main]
   workflow_dispatch:
-
+permissions:
+  contents: read
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
 jobs:
-  publish:
+  check-release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.release.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check registry version
+        id: release
+        run: node scripts/check-release.js
+  build-and-publish:
+    needs: check-release
+    if: needs.check-release.outputs.publish == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org/'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Test
-        run: npm test
-        env:
-          CI: true
-
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+      - name: Use an OIDC-capable npm CLI
+        run: npm install --global npm@11.13.0
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Validate package and documentation
+        run: npm run verify
       - name: Publish to npm
-        if: github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Hint when tag was not pushed
-        if: github.ref_type != 'tag' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        run: |
-          echo "::notice:: Build and test passed. To publish to npm, push your version tag:"
-          echo "  git push --follow-tags"
-          echo "Or: git push origin \$(git describe --tags --abbrev=0)"
+        run: npm publish --access public
+      - name: Verify published version
+        run: node scripts/verify-release.js
+  verify-existing-release:
+    needs: check-release
+    if: needs.check-release.outputs.publish == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify existing npm version
+        run: node scripts/verify-release.js

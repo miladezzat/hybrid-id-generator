@@ -20,29 +20,24 @@ function getNodeCrypto(): typeof import('crypto') | null {
  * @returns {number} A random number within the range defined by the specified number of bits.
  */
 export function generateRandomBits(randomBits: number, useCrypto: boolean): number {
-    if (useCrypto) {
-        const byteCount = Math.ceil(randomBits / 8);
-        if (typeof globalThis !== 'undefined' && globalThis.crypto?.getRandomValues) {
-            const arr = new Uint8Array(byteCount);
-            globalThis.crypto.getRandomValues(arr);
-            let randomNum = 0;
-            for (let i = 0; i < arr.length; i++) {
-                randomNum = (randomNum << 8) | arr[i];
-            }
-            return randomNum & ((1 << randomBits) - 1);
-        }
-        const nodeCrypto = getNodeCrypto();
-        if (nodeCrypto) {
-            const randomBytes = nodeCrypto.randomBytes(byteCount);
-            let randomNum = 0;
-            for (let i = 0; i < randomBytes.length; i++) {
-                randomNum = (randomNum << 8) | randomBytes[i];
-            }
-            return randomNum & ((1 << randomBits) - 1);
-        }
+    if (!Number.isInteger(randomBits) || randomBits < 0 || randomBits > 32) {
+        throw new Error('randomBits must be an integer between 0 and 32.');
     }
-    const maxRandomValue = (1 << randomBits) - 1;
-    return Math.floor(Math.random() * (maxRandomValue + 1));
+    if (randomBits === 0) return 0;
+    const range = 2 ** randomBits;
+    if (!useCrypto) return Math.floor(Math.random() * range);
+
+    const bytes = new Uint8Array(Math.ceil(randomBits / 8));
+    if (globalThis.crypto?.getRandomValues) {
+        globalThis.crypto.getRandomValues(bytes);
+    } else {
+        const nodeCrypto = getNodeCrypto();
+        if (!nodeCrypto) throw new Error('Cryptographic randomness is unavailable in this environment.');
+        bytes.set(nodeCrypto.randomBytes(bytes.length));
+    }
+    let value = 0;
+    for (const byte of bytes) value = value * 256 + byte;
+    return value % range;
 }
 
 /**
@@ -75,134 +70,55 @@ export function obfuscateTimestamp(timestamp: bigint): bigint {
  * @throws {Error} If the machine ID is invalid based on the strategy.
  */
 export function validateMachineId(machineIdStrategy: string | undefined, machineId: number | string | undefined, maxMachineId: number): number {
-    if (machineIdStrategy === 'random') {
-        if (typeof machineId !== 'number') {
-            throw new Error("When machineIdStrategy is 'random', machineId must be provided as a number.");
-        }
-        if (machineId < 0 || machineId > maxMachineId) {
-            throw new Error(`Machine ID must be between 0 and ${maxMachineId}.`);
-        }
-        return machineId;
+    if (!Number.isInteger(maxMachineId) || maxMachineId < 0 || maxMachineId > 4294967295) {
+        throw new Error('Maximum machine ID must be an integer between 0 and 4294967295.');
     }
-    if (typeof machineId === 'number') {
-        if (machineId < 0 || machineId > maxMachineId) {
-            throw new Error(`Machine ID must be between 0 and ${maxMachineId}.`);
-        }
-        return machineId;
+    if (machineIdStrategy !== undefined && machineIdStrategy !== 'random') {
+        throw new Error(`Invalid machine ID strategy: ${machineIdStrategy}`);
     }
-    return Math.floor(Math.random() * (maxMachineId + 1));
+    if (machineId === undefined && machineIdStrategy === undefined) {
+        return generateRandomBits(32, false) % (maxMachineId + 1);
+    }
+    if (typeof machineId !== 'number' || !Number.isSafeInteger(machineId) || machineId < 0 || machineId > maxMachineId) {
+        throw new Error(`Machine ID must be between 0 and ${maxMachineId} and must be an integer.`);
+    }
+    return machineId;
 }
 
-// Helper function to convert input to bigint
-/**
- * Converts the input to a bigint.
- *
- * @param {bigint | string} input - The input to convert, which can be either a bigint or a string.
- * @returns {bigint} The converted bigint.
- */
-function toBigInt(input: bigint | string): bigint {
-    return typeof input === 'bigint' ? input : BigInt(input);
-}
-
-/**
- * Encodes a bigint or string input to a Base62 string.
- *
- * @param {bigint | string} input - The bigint or string to encode.
- * @returns {string} The Base62 encoded string.
- */
-export function encodeBase62(input: bigint | string): string {
-    let num = toBigInt(input);
+/** Encode non-negative integers using positional digits, without byte padding. */
+function encodeInteger(input: bigint | string, alphabet: string): string {
+    if (typeof input !== 'bigint' && (typeof input !== 'string' || !/^[0-9]+$/.test(input))) {
+        throw new Error('ID must be a non-negative integer or decimal string.');
+    }
+    let value = BigInt(input);
+    if (value < 0n) throw new Error('ID must be a non-negative integer.');
+    const base = BigInt(alphabet.length);
     let encoded = '';
-    while (num > 0) {
-        encoded = Base62Chars[Number(num % BigInt(62))] + encoded;
-        num = num / BigInt(62);
+    do {
+        encoded = alphabet[Number(value % base)] + encoded;
+        value /= base;
+    } while (value > 0n);
+    return encoded;
+}
+
+function decodeInteger(encoded: string, alphabet: string): bigint {
+    if (typeof encoded !== 'string' || encoded.length === 0) throw new Error('Encoded ID must be a non-empty string.');
+    let value = 0n;
+    const base = BigInt(alphabet.length);
+    for (const character of encoded) {
+        const digit = alphabet.indexOf(character);
+        if (digit < 0) throw new Error('Invalid character in encoded ID.');
+        value = value * base + BigInt(digit);
     }
-    return encoded || '0';
+    return value;
 }
 
-/**
- * Decodes a Base62 encoded string to a bigint.
- *
- * @param {string} encoded - The Base62 encoded string to decode.
- * @returns {bigint} The decoded bigint.
- */
-export function decodeBase62(encoded: string): bigint {
-    let num = BigInt(0);
-    for (let i = 0; i < encoded.length; i++) {
-        num = num * BigInt(62) + BigInt(Base62Chars.indexOf(encoded[i]));
-    }
-    return num;
-}
+export function encodeBase62(input: bigint | string): string { return encodeInteger(input, Base62Chars); }
+export function decodeBase62(encoded: string): bigint { return decodeInteger(encoded, Base62Chars); }
+export function encodeBase32(input: bigint | string): string { return encodeInteger(input, Base32Chars); }
+export function decodeBase32(encoded: string): bigint { return decodeInteger(encoded, Base32Chars); }
+export function encodeBase64(input: bigint | string): string { return encodeInteger(input, Base64Chars); }
+export function decodeBase64(encoded: string): bigint { return decodeInteger(encoded, Base64Chars); }
 
-/**
- * Encodes a bigint or string input to a Base32 string.
- *
- * @param {bigint | string} input - The bigint or string to encode.
- * @returns {string} The Base32 encoded string.
- */
-export function encodeBase32(input: bigint | string): string {
-    let num = toBigInt(input);
-    let encoded = '';
-    while (num > 0) {
-        encoded = Base32Chars[Number(num % BigInt(32))] + encoded;
-        num = num / BigInt(32);
-    }
-    return encoded || '0';
-}
-
-/**
- * Decodes a Base32 encoded string to a bigint.
- *
- * @param {string} encoded - The Base32 encoded string to decode.
- * @returns {bigint} The decoded bigint.
- */
-export function decodeBase32(encoded: string): bigint {
-    let num = BigInt(0);
-    for (let i = 0; i < encoded.length; i++) {
-        num = num * BigInt(32) + BigInt(Base32Chars.indexOf(encoded[i]));
-    }
-    return num;
-}
-
-/**
- * Decodes a Base64 encoded string to a bigint.
- *
- * @param {string} encoded - The Base64 encoded string to decode.
- * @returns {bigint} The decoded bigint.
- */
-export function decodeBase64(encoded: string): bigint {
-    let num = BigInt(0);
-    for (let i = 0; i < encoded.length; i++) {
-        num = num * BigInt(64) + BigInt(Base64Chars.indexOf(encoded[i]));
-    }
-    return num;
-}
-
-/**
- * Encodes a bigint or string input to a Base64 string.
- *
- * @param {bigint | string} input - The bigint or string to encode.
- * @returns {string} The Base64 encoded string.
- */
-export function encodeBase64(input: bigint | string): string {
-    let num = toBigInt(input);
-    let encoded = '';
-    while (num > 0) {
-        encoded = Base64Chars[Number(num % BigInt(64))] + encoded;
-        num = num / BigInt(64);
-    }
-    return encoded || '0';
-}
-
-
-export default {
-    generateRandomBits,
-    obfuscateTimestamp,
-    validateMachineId,
-    encodeBase62,
-    decodeBase62,
-    encodeBase32,
-    decodeBase32,
-    decodeBase64,
-    encodeBase64
-}
+export default { generateRandomBits, obfuscateTimestamp, validateMachineId,
+    encodeBase62, decodeBase62, encodeBase32, decodeBase32, encodeBase64, decodeBase64 };
