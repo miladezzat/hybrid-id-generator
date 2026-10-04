@@ -3,7 +3,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'docs');
+const output = path.join(root, 'documentation', '.vitepress', 'dist');
 const base = '/hybrid-id-generator/';
 const redirects = {
   'classes/HybridIDGenerator.html': 'api/generator.html',

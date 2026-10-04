@@ -12,7 +12,9 @@ The checks cover source regressions, built and packed installations, CommonJS/ES
 
 ## GitHub Pages
 
-Pages serves the committed `docs/` directory from **main**. VitePress Markdown and theme files live in `documentation/`.
+The `Deploy Documentation` workflow builds VitePress Markdown and theme files from **main**, tests the resulting site, and uploads `documentation/.vitepress/dist/` as a Pages artifact. The deploy job depends on that successful build, so the live site uses the source from the same commit.
+
+When migrating from the old branch-based deployment, set repository **Settings → Pages → Build and deployment → Source** to **GitHub Actions** after merging this workflow. Run `Deploy Documentation` manually if the first deployment started before that setting was changed. The existing committed `docs/` site is retained during the transition; new builds do not overwrite or depend on it.
 
 ```bash
 npm run docs
@@ -20,7 +22,7 @@ npm run smoke:docs
 npm run smoke:docs:browser
 ```
 
-Commit both the source changes and generated `docs/` output. After the change is merged into `main`, GitHub Pages rebuilds automatically. The site's base path is `/hybrid-id-generator/`; its address is `https://miladezzat.github.io/hybrid-id-generator/`.
+Commit source changes only. After the change is merged into `main`, GitHub Actions builds and deploys the site automatically. The site's base path is `/hybrid-id-generator/`; its address is `https://miladezzat.github.io/hybrid-id-generator/`.
 
 For editing, use `npm run docs:serve`; for built-site review, use `npm run docs:preview`. Open the printed URL with the repository base path.
 
@@ -44,7 +46,7 @@ The matching workflow must be committed. No `NPM_TOKEN` is passed. GitHub-hosted
 **main** is the only permanent branch. Open pull requests against `main`; merging a reviewed change updates the documentation and runs the npm release gate. Temporary feature branches can be removed after merging.
 
 1. Update the version and changelog in the reviewed change. `npm run prepare-release -- patch` validates and uses npm's built-in version command; it creates a commit and tag, so run it only when ready for that operation.
-2. Build and commit documentation for the final version.
+2. Build and check documentation for the final version; commit its source.
 3. Merge or push the approved release to `main`.
 
 The workflow compares `package.json` with npm `latest` before installing dependencies. Equal versions skip publish and verify the existing release. A newer stable version runs the full checks, publishes once, then polls the exact npm version for registry propagation. Older or malformed versions fail the gate.
