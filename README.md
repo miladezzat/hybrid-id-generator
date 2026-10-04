@@ -36,7 +36,7 @@ npx playwright install chromium
 npm run verify
 ```
 
-`npm run docs:serve` previews the VitePress source. `npm run docs` generates the committed `docs/` directory used by GitHub Pages on `main`.
+`npm run docs:serve` previews the VitePress source. `npm run docs` builds `documentation/.vitepress/dist/`. GitHub Actions builds, tests, and deploys that artifact from `main`; generated files do not need to be committed.
 
 npm publishing runs on `main` using a configured npm trusted publisher, with a version gate and post-publish registry verification. See [releasing and deployment](documentation/releasing.md).
 

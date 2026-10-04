@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const { chromium } = require('playwright');
 const { serve } = require('./static-server');
 (async () => {
-  const { server, url } = await serve(path.resolve(__dirname, '../docs'), '/hybrid-id-generator/');
+  const { server, url } = await serve(path.resolve(__dirname, '../documentation/.vitepress/dist'), '/hybrid-id-generator/');
   let browser;
   try {
     browser = await chromium.launch();

@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const root = path.resolve(__dirname, '../docs');
+const root = path.resolve(__dirname, '../documentation/.vitepress/dist');
 const base = '/hybrid-id-generator/';
 const pages = ['index', 'getting-started', 'configuration', 'uniqueness', 'encoding', 'compatibility', 'examples', 'migration', 'releasing', 'contributing', 'changelog', 'license', 'api/generator', 'api/id', 'api/providers', 'api/helpers'];
 for (const page of pages) {

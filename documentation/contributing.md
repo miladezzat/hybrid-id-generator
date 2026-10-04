@@ -16,7 +16,7 @@ Add a regression test for a behavior fix. Run `npm run verify` before a release;
 
 ## Documentation
 
-Edit `documentation/`, then run `npm run docs` and commit the generated `docs/` site. Keep API signatures, examples, package behavior, and migration notes aligned. Local search indexes the Markdown guides automatically.
+Edit `documentation/`, then run `npm run docs` and the documentation smoke checks. The ignored `documentation/.vitepress/dist/` directory is a build artifact; commit the source changes. GitHub Actions builds and deploys the reviewed Markdown from `main`. Keep API signatures, examples, package behavior, and migration notes aligned. Local search indexes the Markdown guides automatically.
 
 ## Pull requests
 

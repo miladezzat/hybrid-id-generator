@@ -8,7 +8,7 @@ export default defineConfig({
   lang: 'en-US',
   base: '/hybrid-id-generator/',
   cleanUrls: false,
-  outDir: fileURLToPath(new URL('../../docs', import.meta.url)),
+  outDir: fileURLToPath(new URL('./dist', import.meta.url)),
   sitemap: { hostname: 'https://miladezzat.github.io/hybrid-id-generator/' },
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/hybrid-id-generator/logo.svg' }]],
   themeConfig: {
