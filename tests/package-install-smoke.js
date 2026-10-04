@@ -12,12 +12,19 @@ try {
   assert.ok(packed.files.some(file => file.path === 'dist/browser.mjs'));
   assert.ok(packed.files.every(file => file.path.startsWith('dist/') || ['package.json', 'README.md', 'LICENSE'].includes(file.path)));
   fs.writeFileSync(path.join(temp, 'package.json'), '{"private":true}');
-  execFileSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--offline', path.join(temp, packed.filename)], { cwd: temp, stdio: 'pipe', env: npmEnv });
+  execFileSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--prefer-offline', path.join(temp, packed.filename)], { cwd: temp, stdio: 'pipe', env: npmEnv });
   const script = `const assert = require('node:assert/strict'); const {HID,HybridIDGenerator}=require('hybrid-id-generator'); assert.equal(HID,HybridIDGenerator); const g=new HID({machineId:1}); assert.equal(g.info(g.nextId()).machineId,1);`;
   execFileSync(process.execPath, ['-e', script], { cwd: temp, stdio: 'inherit' });
   execFileSync(process.execPath, ['--input-type=module', '-e', "import {HID,HybridIDGenerator,HybridID} from 'hybrid-id-generator'; if(HID!==HybridIDGenerator) throw Error('Alias mismatch'); const g=new HID({machineId:2}); if (!(g.nextId() instanceof HybridID)) throw Error('Invalid ESM export');"], { cwd: temp, stdio: 'inherit' });
-  const fixture = path.join(temp, 'fixture.ts');
-  fs.writeFileSync(fixture, "import {HID,HybridID,HybridIDGeneratorOptions} from 'hybrid-id-generator'; const opts:HybridIDGeneratorOptions={machineId:1}; const id:HybridID=new HID(opts).nextId(); id.toBase62();\n");
-  execFileSync(process.execPath, [require.resolve('typescript/bin/tsc'), '--target', 'ES2020', '--module', 'Node16', '--moduleResolution', 'Node16', '--strict', '--skipLibCheck', '--noEmit', fixture], { cwd: temp, stdio: 'inherit' });
+  const source = "import {HID,HybridID,HybridIDGeneratorOptions} from 'hybrid-id-generator'; const opts:HybridIDGeneratorOptions={machineId:1}; const generator=new HID(opts); const id:HybridID=generator.nextId(); generator.on('idGenerated', (value:HybridID)=>value.toBase62()); generator.once('idGenerated', (value:HybridID)=>value.toBigInt()); id.toBase62();\n";
+  for (const [filename, resolution] of [
+    ['fixture.ts', ['--module', 'Node16', '--moduleResolution', 'Node16']],
+    ['fixture.mts', ['--module', 'NodeNext', '--moduleResolution', 'NodeNext']],
+    ['browser.ts', ['--module', 'ESNext', '--moduleResolution', 'Bundler', '--customConditions', 'browser']],
+  ]) {
+    const fixture = path.join(temp, filename);
+    fs.writeFileSync(fixture, source);
+    execFileSync(process.execPath, [require.resolve('typescript/bin/tsc'), '--target', 'ES2020', '--strict', '--noEmit', ...resolution, fixture], { cwd: temp, stdio: 'inherit' });
+  }
   console.log(`Packed CommonJS, ESM, and TypeScript install passed (${packed.files.length} files)`);
 } finally { fs.rmSync(temp, { recursive: true, force: true }); }
